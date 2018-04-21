@@ -24,5 +24,6 @@ private:
 	INTERFACE_STATE currState;
 	vector<string> optionsToPrint;
 	vector<string> valuesOfOptions;
+	vector<string> stateTitle;
 };
 
