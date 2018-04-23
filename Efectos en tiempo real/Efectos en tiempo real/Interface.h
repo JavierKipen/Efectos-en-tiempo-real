@@ -9,22 +9,23 @@ class Interface
 {
 public:
 	Interface();
-	bool interact(); //Interacts with the user, changing the effects and exiting.
+	bool interact(); //Loop principal.
 	void attachAudioEffects(AudioEffects *A);
 	
 	~Interface();
 private:
-	bool isValid(int ch);
-	bool handleFirstMenu(unsigned int optChosen);
-	void handleChooseEffect(unsigned int optChosen);
-	void handleChooseParam(unsigned int optChosen);
-	void handleSetParamValue(double newValue);
-	void printMenu();
+	bool isValid(int ch); //Validación de los eventos
+	bool handleFirstMenu(unsigned int optChosen); //Maneja los eventos válidos en el estado First Menu
+	void handleChooseEffect(unsigned int optChosen);//Maneja los eventos válidos en el estado Choose Effect
+	void handleChooseParam(unsigned int optChosen);//Maneja los eventos válidos en el estado Choose Param
+	void handleSetParamValue(double newValue);//Maneja los eventos válidos en el estado Param Value
+	void printMenu(); //Para cualquier estado, será la función que imprimirá en pantalla lo correspondiente.
+
 	AudioEffects * A;
 	INTERFACE_STATE currState;
-	vector<string> optionsToPrint;
-	vector<double> valuesOfOptions;
-	vector<string> stateTitle;
-	string valueErrorMsg;
+	vector<string> optionsToPrint; //Cada estado tendrá opciones de acción en cada estado
+	vector<double> valuesOfOptions; //Esas opciones pueden tener valores, en el caso que sean parámetros de efectos
+	vector<string> stateTitle; //Títulos predefinidos para cada estado;
+	string valueErrorMsg; //Mensaje de error al introducir un valor erróneo para un parámetro
 };
 

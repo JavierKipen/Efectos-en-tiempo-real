@@ -16,7 +16,7 @@ bool Fuzz::setParam(string paramName, double paramValue)
 	bool retVal=false;
 	if (paramName=="Amplifications")
 	{
-		if (paramValue <= 0 || paramValue > MAX_AMPLIFICATIONS ||  paramValue !=floor(paramValue))
+		if (paramValue <= 0 || paramValue > MAX_AMPLIFICATIONS ||  paramValue !=floor(paramValue)) //El número de amplificaciones debe ser entero, positivo y menor a 5
 			ErrorMsg = FUZZ_AMP_VALUE_ERROR_MSG;
 		else
 		{

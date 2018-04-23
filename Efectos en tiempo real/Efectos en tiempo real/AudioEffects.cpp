@@ -37,7 +37,7 @@ vector<double> AudioEffects::getCurrParamValues()
 bool AudioEffects::setParam(string paramName, double paramValue)
 {
 	bool retVal=false;
-	if (paramValue != INFINITY && paramValue != -INFINITY && paramValue != NAN)
+	if (paramValue != INFINITY && paramValue != -INFINITY && paramValue != NAN) //Evita valores que nunca van a tomar parámetros.
 		retVal = currentEffect->setParam(paramName, paramValue);
 	return retVal;
 }

@@ -16,6 +16,12 @@
     <Filter Include="Header Files\Portaudio Files">
       <UniqueIdentifier>{7af37e32-0a4d-4a52-adc1-2025ae33a022}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Efectos">
+      <UniqueIdentifier>{88f21f92-e18f-4611-901f-4cbbfedbad8f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Efectos">
+      <UniqueIdentifier>{7456aec5-c983-452d-99d2-1d1ee9a055ec}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -31,7 +37,7 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Fuzz.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Efectos</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -75,7 +81,7 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Fuzz.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Efectos</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
