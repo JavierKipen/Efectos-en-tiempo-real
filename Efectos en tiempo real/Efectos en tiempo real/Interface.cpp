@@ -14,29 +14,31 @@
 
 
 
+
 Interface::Interface()
 {
 	currState = FIRST_MENU;
 	optionsToPrint = FIRST_MENU_OPTIONS;
-	printMenu();
 	stateTitle = { FIRST_MENU_MSG, CHOOSE_EFFECT_MSG , CHOOSE_PARAMETER_MSG, SET_PARAM_VALUE_MSG };
+	printMenu();
+	
 }
 
 bool Interface::interact()
 {
 	bool quit = false;
-	if (currState != SET_PARAM_VALUE)
+	if (currState != SET_PARAM_VALUE) //Salvo para el estado set param value, se tomara solo 1 caracter para indicar 1 opcion
 	{
-		int ch = getch();
+		int ch = _getch();
 		if (isValid(ch))
 		{
-			switch (currState)
+			switch (currState) //Dependiendo en el estado de la interface se ejecutaran distintas acciones
 			{
 			case FIRST_MENU:
 				quit = handleFirstMenu(ch - (int)'1'); //Solo se puede salir en el primer menú.
 				break;
 			case CHOOSE_EFFECT:
-				handleChooseEffect(ch - (int)'1');
+				handleChooseEffect(ch - (int)'1'); 
 				break;
 			case CHOOSE_PARAM:
 				handleChooseParam(ch - (int)'1');
@@ -46,7 +48,7 @@ bool Interface::interact()
 	}
 	else
 	{
-		double x;
+		double x; //En este estado solo se tomarán valores para establecer parámetros.
 		cin >> x;
 		handleSetParamValue(x);
 	}
@@ -62,25 +64,26 @@ void Interface::attachAudioEffects(AudioEffects * A)
 
 bool Interface::isValid(int ch)
 {
-	return (ch - (int)'1') <= optionsToPrint.size();
+	return (ch - (int)'0') <= optionsToPrint.size() && (ch - (int)'1')>=0;
 }
 
 bool Interface::handleFirstMenu(unsigned int optChosen)
 {
 	bool retVal = false;
-	if (strcmp(optionsToPrint[optChosen].c_str(), CHANGE_EFFECT))
+	if (optionsToPrint[optChosen]==CHANGE_EFFECT)
 	{
-		currState = FIRST_MENU;
-		optionsToPrint = LIST_OF_EFFECTS;
+		currState = CHOOSE_EFFECT;
+		optionsToPrint = A->getListOfEffects();
 		optionsToPrint.push_back(CANCEL);
 	}
-	else if (strcmp(optionsToPrint[optChosen].c_str(), CHANGE_EFFECT_PARAMS))
+	else if (optionsToPrint[optChosen]==CHANGE_EFFECT_PARAMS)
 	{
-		currState = FIRST_MENU;
+		currState = CHOOSE_PARAM;
 		optionsToPrint = A->getCurrParamNames();
 		optionsToPrint.push_back(CANCEL);
+		valuesOfOptions = A->getCurrParamValues();
 	}
-	else if (strcmp(optionsToPrint[optChosen].c_str(), EXIT))
+	else if (optionsToPrint[optChosen]==EXIT)
 		retVal = true;
 	if (!retVal)
 		printMenu();
@@ -88,42 +91,67 @@ bool Interface::handleFirstMenu(unsigned int optChosen)
 
 }
 
-void Interface::handleChooseEffect(unsigned int optChoosed)
+void Interface::handleChooseEffect(unsigned int optChosen)
 {
+	if (optionsToPrint[optChosen] != CANCEL) //En el caso que se haya escogido un efecto
+		A->pickNewEffect(optionsToPrint[optChosen]);
+	currState = FIRST_MENU; //Siempre se volverá al primer menú
+	optionsToPrint = FIRST_MENU_OPTIONS;
+	printMenu();
 	
 }
 
 void Interface::handleChooseParam(unsigned int optChosen)
 {
 	string aux;
-	if (strcmp(optionsToPrint[optChosen].c_str(), CANCEL))
+	double aux2;
+	if (optionsToPrint[optChosen]==CANCEL)
 	{
 		currState = FIRST_MENU;
 		optionsToPrint = FIRST_MENU_OPTIONS;
+		valuesOfOptions.clear();
 	}
 	else
 	{
 		currState = SET_PARAM_VALUE;
 		aux=optionsToPrint[optChosen];
+		aux2= valuesOfOptions[optChosen];
 		optionsToPrint.clear();
 		optionsToPrint.push_back(aux);
+		valuesOfOptions.clear();
+		valuesOfOptions.push_back(aux2);
 	}
 	printMenu();
 }
 
-void Interface::handleSetParamValue(unsigned int optChoosed)
+void Interface::handleSetParamValue(double newValue)
 {
+	if (A->setParam(optionsToPrint[0], newValue)) //En el caso que se ingresó un valor no erroneo
+	{
+		currState = CHOOSE_PARAM;
+		optionsToPrint = A->getCurrParamNames();
+		optionsToPrint.push_back(CANCEL);
+		valuesOfOptions = A->getCurrParamValues();
+	}
+	else
+		valueErrorMsg = A->popErrorMsg();
+	printMenu();
 }
 
 void Interface::printMenu()
 {
 	system("cls");
 	string aux;
-	cout << stateTitle[(unsigned int)currState)]<< endl;
+	cout << stateTitle[(unsigned int)currState]<< endl;
 	for (unsigned int i = 0; i < optionsToPrint.size(); i++)
 	{
-		aux = valuesOfOptions.size() ? to_string(i+1) + "-" + optionsToPrint[i] + "/t" + valuesOfOptions[i] : to_string(i + 1) + "-" + optionsToPrint[i];
+		aux = valuesOfOptions.size()>i ? to_string(i+1) + "-" + optionsToPrint[i] + "\t\t" + to_string(valuesOfOptions[i]) : to_string(i + 1) + "-" + optionsToPrint[i];
 		cout << aux << endl;
+	}
+	if (valueErrorMsg.size() != 0)
+	{
+		cout << valueErrorMsg << endl;
+		valueErrorMsg.clear();
 	}
 }
 

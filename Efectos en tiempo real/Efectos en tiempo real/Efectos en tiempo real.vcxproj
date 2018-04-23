@@ -123,12 +123,14 @@
   <ItemGroup>
     <ClCompile Include="AudioEffects.cpp" />
     <ClCompile Include="Effect.cpp" />
+    <ClCompile Include="Fuzz.cpp" />
     <ClCompile Include="Interface.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AudioEffects.h" />
     <ClInclude Include="Effect.h" />
+    <ClInclude Include="Fuzz.h" />
     <ClInclude Include="Interface.h" />
     <ClInclude Include="pa_asio.h" />
     <ClInclude Include="pa_jack.h" />

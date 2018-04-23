@@ -10,10 +10,15 @@ class Effect
 {
 public:
 	Effect();
-	virtual vector<string> getParamNames();
-	virtual vector<double> getParamValues();
-	virtual bool setParam(string paramName, double paramValue);
-	virtual bool Action(float * in, float * out, unsigned int len);
+	vector<string> getParamNames();
+	vector<double> getParamValues();
+	virtual bool setParam(string paramName, double paramValue)=0;
+	virtual bool Action(float * in, float * out, unsigned int len)=0;
+	string popInputErrorMsg();
 	virtual ~Effect();
+protected:
+	vector<string> paramNames;
+	vector<double> paramValues;
+	string ErrorMsg;
 };
 

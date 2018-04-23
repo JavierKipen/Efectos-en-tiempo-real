@@ -15,15 +15,16 @@ public:
 	~Interface();
 private:
 	bool isValid(int ch);
-	bool handleFirstMenu(unsigned int optChoosed);
-	void handleChooseEffect(unsigned int optChoosed);
-	void handleChooseParam(unsigned int optChoosed);
-	void handleSetParamValue(unsigned int optChoosed);
+	bool handleFirstMenu(unsigned int optChosen);
+	void handleChooseEffect(unsigned int optChosen);
+	void handleChooseParam(unsigned int optChosen);
+	void handleSetParamValue(double newValue);
 	void printMenu();
 	AudioEffects * A;
 	INTERFACE_STATE currState;
 	vector<string> optionsToPrint;
-	vector<string> valuesOfOptions;
+	vector<double> valuesOfOptions;
 	vector<string> stateTitle;
+	string valueErrorMsg;
 };
 
