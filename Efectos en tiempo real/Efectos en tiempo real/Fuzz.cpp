@@ -11,33 +11,34 @@ Fuzz::Fuzz()
 }
 
 
-bool Fuzz::setParam(string paramName, double paramValue)
+bool Fuzz::setParam(string paramName, string paramValue)
 {
 	bool retVal=false;
 	if (paramName=="Amplifications")
 	{
-		if (paramValue <= 0 || paramValue > MAX_AMPLIFICATIONS ||  paramValue !=floor(paramValue)) //El número de amplificaciones debe ser entero, positivo y menor a 5
+		float aux = stof(paramValue);
+		if (aux <= 0 || aux > MAX_AMPLIFICATIONS ||  aux !=floor(aux)) //El número de amplificaciones debe ser entero, positivo y menor a 5
 			ErrorMsg = FUZZ_AMP_VALUE_ERROR_MSG;
 		else
 		{
-			paramValues[0] = (unsigned int)paramValue;
+			paramValues[0] = paramValue;
 			retVal = true;
 		}
 	}
 	return retVal;
 }
 
-bool Fuzz::Action(float * in, float * out, unsigned int len)
+bool Fuzz::Action(const float * in, float * out, unsigned int len)
 {
 	float aux;
-	for (unsigned int i = 0; i < len; i++)
+	for (unsigned int i = 0; i < 2*len; i++) //Dos veces len por ser estereo.
 	{
 		aux = cubicAmplifier(*in++);
-		for (unsigned int j = 1; j < paramValues[1]; j++)
+		for (unsigned int j = 1; j < (unsigned int)stof(paramValues[0]); j++)
 			aux = cubicAmplifier(aux);
 		*out++ = aux;
 	}
-	return false;
+	return true;
 }
 float Fuzz::cubicAmplifier(float input)
 {

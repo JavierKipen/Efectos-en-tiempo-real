@@ -11,7 +11,7 @@ vector<string> Effect::getParamNames()
 	return paramNames;
 }
 
-vector<double> Effect::getParamValues()
+vector<string> Effect::getParamValues()
 {
 	return paramValues;
 }

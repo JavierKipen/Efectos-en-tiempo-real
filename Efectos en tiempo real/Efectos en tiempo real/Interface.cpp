@@ -49,7 +49,7 @@ bool Interface::interact()
 	}
 	else
 	{
-		double x; //En este estado solo se tomarán valores para establecer parámetros.
+		string x; //En este estado solo se tomarán valores para establecer parámetros.
 		cin >> x;
 		handleSetParamValue(x);
 	}
@@ -103,8 +103,7 @@ void Interface::handleChooseEffect(unsigned int optChosen)
 
 void Interface::handleChooseParam(unsigned int optChosen)
 {
-	string aux;
-	double aux2;
+	string aux, aux2;
 	if (optionsToPrint[optChosen]==CANCEL)
 	{//Si se tocó cancelar, se vuelve al menú principal.
 		currState = FIRST_MENU;
@@ -124,7 +123,7 @@ void Interface::handleChooseParam(unsigned int optChosen)
 	printMenu();
 }
 
-void Interface::handleSetParamValue(double newValue)
+void Interface::handleSetParamValue(string newValue)
 {
 	if (A->setParam(optionsToPrint[0], newValue)) //En el caso que se ingresó un valor no erroneo
 	{
@@ -147,7 +146,7 @@ void Interface::printMenu()
 
 	for (unsigned int i = 0; i < optionsToPrint.size(); i++)
 	{/*Se imprimen todas las opciones, junto con sus valores si es que existen.*/
-		aux = valuesOfOptions.size()>i ? to_string(i+1) + "-" + optionsToPrint[i] + "\t\t" + to_string(valuesOfOptions[i]) : to_string(i + 1) + "-" + optionsToPrint[i];
+		aux = valuesOfOptions.size()>i ? to_string(i+1) + "-" + optionsToPrint[i] + "\t\t" + valuesOfOptions[i] : to_string(i + 1) + "-" + optionsToPrint[i];
 		cout << aux << endl;
 	}
 	if (valueErrorMsg.size() != 0)

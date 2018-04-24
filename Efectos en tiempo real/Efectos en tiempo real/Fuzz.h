@@ -2,7 +2,7 @@
 #include "Effect.h"
 #include "portaudio.h"
 
-#define DEFAULT_AMPLIFICATIONS 3
+#define DEFAULT_AMPLIFICATIONS "3"
 #define MAX_AMPLIFICATIONS 5
 
 #define FUZZ_AMP_VALUE_ERROR_MSG "The value of amplifications must be a positive integer between 1 and 5"
@@ -14,8 +14,8 @@ class Fuzz :
 {
 public:
 	Fuzz();
-	bool setParam(string paramName, double paramValue);
-	bool Action(float * in, float * out, unsigned int len);
+	bool setParam(string paramName, string paramValue);
+	bool Action(const float * in, float * out, unsigned int len);
 	~Fuzz();
 private:
 	float cubicAmplifier(float);
