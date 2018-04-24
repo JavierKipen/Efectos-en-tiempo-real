@@ -20,10 +20,16 @@ public:
 	vector<string> getListOfEffects(); //Devuelve todos los efectos reconocidos
 	void pickNewEffect(string newEffect); //Escoge un nuevo efecto actual. El string que se pasa como argumento tiene que ser alguno de los que devuelve getlistofeffects
 	string popErrorMsg();
+	bool getInitOk();
 	~AudioEffects();
 private:
+	void initPortAudio(unsigned int sampleRate, unsigned int framesPerBuffer);
+	bool initOk;
 	Effect * currentEffect;
 	vector<string> allEffects;
+	PaStreamParameters inputParameters, outputParameters;
+	PaStream *stream;
+	PaError err;
 };
 
 int audioEffectCallback(const void *inputBuffer, void *outputBuffer,

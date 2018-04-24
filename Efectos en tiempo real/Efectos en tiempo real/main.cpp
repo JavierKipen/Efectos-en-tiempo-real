@@ -6,9 +6,12 @@ void main(void)
 	bool exit = false;
 	Interface interfaceA;
 	interfaceA.attachAudioEffects(&audioEffects);
-	audioEffects.startPlaying();
-	while (exit == false)
-		exit = interfaceA.interact(); //Hasta que se decida terminar el programa se estará en este loop
+	if (audioEffects.getInitOk() == true && audioEffects.startPlaying()) //Si se inicializaron bien las cosas de port audio
+	{
+		while (exit == false)
+			exit = interfaceA.interact(); //Hasta que se decida terminar el programa se estará en este loop
+	}
+	
 
 
 }

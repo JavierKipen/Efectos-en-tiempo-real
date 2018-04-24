@@ -6,11 +6,46 @@ AudioEffects::AudioEffects()
 {
 	currentEffect = new Fuzz;
 	allEffects = LIST_OF_EFFECTS;
+	initOk = false;
+	err = Pa_Initialize();
+	if (err == paNoError)
+		initPortAudio(DEFAULT_SAMPLE_RATE,DEFAULT_FRAMES_PER_BUFFER);
 }
+void AudioEffects::initPortAudio(unsigned int sampleRate, unsigned int framesPerBuffer)
+{
+	inputParameters.device = Pa_GetDefaultInputDevice(); /* default input device */
+	if (inputParameters.device != paNoDevice)
+	{
+		inputParameters.channelCount = 2;       /* stereo input */
+		inputParameters.sampleFormat = PA_SAMPLE_TYPE;
+		inputParameters.suggestedLatency = Pa_GetDeviceInfo(inputParameters.device)->defaultLowInputLatency;
+		inputParameters.hostApiSpecificStreamInfo = NULL;
+		outputParameters.device = Pa_GetDefaultOutputDevice(); /* default output device */
+		if (outputParameters.device != paNoDevice)
+		{
+			outputParameters.channelCount = 2;       /* stereo output */
+			outputParameters.sampleFormat = PA_SAMPLE_TYPE;
+			outputParameters.suggestedLatency = Pa_GetDeviceInfo(outputParameters.device)->defaultLowOutputLatency;
+			outputParameters.hostApiSpecificStreamInfo = NULL;
+			err = Pa_OpenStream(&stream, &inputParameters,&outputParameters, sampleRate, framesPerBuffer,
+				0, /* paClipOff, */  /* we won't output out of range samples so don't bother clipping them */
+				audioEffectCallback,
+				this);
+			if (err == paNoError)
+				initOk = true;
+		}
+		else
+			fprintf(stderr, "Error: No default output device.\n");
+	}
+	else
+		fprintf(stderr, "Error: No default input device.\n");
+}
+
 
 bool AudioEffects::startPlaying()
 {
-	return false;
+	err = Pa_StartStream(stream);
+	return err == paNoError;
 }
 void AudioEffects::pickNewEffect(string newEffect)
 {
@@ -22,6 +57,11 @@ void AudioEffects::pickNewEffect(string newEffect)
 string AudioEffects::popErrorMsg()
 {
 	return currentEffect->popInputErrorMsg();
+}
+
+bool AudioEffects::getInitOk()
+{
+	return initOk;
 }
 
 vector<string> AudioEffects::getCurrParamNames()
@@ -59,6 +99,7 @@ vector<string> AudioEffects::getListOfEffects()
 AudioEffects::~AudioEffects()
 {
 }
+
 
 int audioEffectCallback(const void * inputBuffer, void * outputBuffer, unsigned long framesPerBuffer, const PaStreamCallbackTimeInfo * timeInfo, PaStreamCallbackFlags statusFlags, void * userData)
 {
