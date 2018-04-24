@@ -1,9 +1,12 @@
 #include "Effect.h"
 
-
-
 Effect::Effect()
 {
+}
+
+Effect::Effect(unsigned int freqSample)
+{
+	this->sampleFreq = freqSample;
 }
 
 vector<string> Effect::getParamNames()

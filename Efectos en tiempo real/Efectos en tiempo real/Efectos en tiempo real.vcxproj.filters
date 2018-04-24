@@ -39,6 +39,9 @@
     <ClCompile Include="Fuzz.cpp">
       <Filter>Source Files\Efectos</Filter>
     </ClCompile>
+    <ClCompile Include="Delay.cpp">
+      <Filter>Source Files\Efectos</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pa_asio.h">
@@ -81,6 +84,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Fuzz.h">
+      <Filter>Header Files\Efectos</Filter>
+    </ClInclude>
+    <ClInclude Include="Delay.h">
       <Filter>Header Files\Efectos</Filter>
     </ClInclude>
   </ItemGroup>

@@ -4,10 +4,11 @@
 
 
 
-Fuzz::Fuzz()
+Fuzz::Fuzz(unsigned int sampleFreq)
 {
 	paramNames=FUZZ_PARAMS;
 	paramValues = FUZZ_DEFAULT_VALUES;
+	this->sampleFreq = sampleFreq;
 }
 
 

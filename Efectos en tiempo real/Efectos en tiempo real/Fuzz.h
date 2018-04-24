@@ -13,7 +13,7 @@ class Fuzz :
 	public Effect
 {
 public:
-	Fuzz();
+	Fuzz(unsigned int sampleFreq);
 	bool setParam(string paramName, string paramValue);
 	bool Action(const float * in, float * out, unsigned int len);
 	~Fuzz();

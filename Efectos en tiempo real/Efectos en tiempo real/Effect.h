@@ -10,6 +10,7 @@ class Effect
 {
 public:
 	Effect();
+	Effect(unsigned int sampleFreq);
 	vector<string> getParamNames();
 	vector<string> getParamValues();
 	virtual bool setParam(string paramName, string paramValue)=0;//Setea un parametro del efecto, devuelve false si el valor no es válido (depende da cada parámetro).
@@ -20,5 +21,6 @@ protected:
 	vector<string> paramNames;//Los parámetros que tendrá cada efecto.
 	vector<string> paramValues;
 	string ErrorMsg;
+	unsigned int sampleFreq;
 };
 

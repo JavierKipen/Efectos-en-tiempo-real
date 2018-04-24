@@ -1,8 +1,9 @@
 #pragma once
 #include "Effect.h"
 #include "Fuzz.h"
+#include "Delay.h"
 
-#define LIST_OF_EFFECTS {"Fuzz"}
+#define LIST_OF_EFFECTS {"Fuzz", "Delay"}
 
 #define DEFAULT_SAMPLE_RATE         (44100)
 #define PA_SAMPLE_TYPE      paFloat32
