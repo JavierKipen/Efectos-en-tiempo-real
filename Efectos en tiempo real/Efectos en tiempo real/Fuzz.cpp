@@ -37,7 +37,7 @@ bool Fuzz::Action(const float * in, float * out, unsigned int len)
 		aux = cubicAmplifier(*in++);
 		for (unsigned int j = 1; j < (unsigned int)stof(paramValues[0]); j++)
 			aux = cubicAmplifier(aux);
-		*out++ = aux;
+		*out++ = aux ;
 	}
 	return true;
 }

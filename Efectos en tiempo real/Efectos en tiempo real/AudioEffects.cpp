@@ -4,7 +4,7 @@
 
 AudioEffects::AudioEffects()
 {
-	currentEffect = new Delay(DEFAULT_SAMPLE_RATE);
+	currentEffect = new Fuzz(DEFAULT_SAMPLE_RATE);
 	allEffects = LIST_OF_EFFECTS;
 	initOk = false;
 	err = Pa_Initialize();
@@ -49,13 +49,16 @@ bool AudioEffects::startPlaying()
 }
 void AudioEffects::pickNewEffect(string newEffect)
 {
+	unsigned int sampleRate = DEFAULT_SAMPLE_RATE, framesPerBuffer = DEFAULT_FRAMES_PER_BUFFER;
+	Pa_StopStream(stream);
+	while ((err = Pa_IsStreamActive(stream)) != 0);
 	delete currentEffect;
-	//Pa_CloseStream(stream);
-	if (newEffect == "Fuzz")
+	if (newEffect == "Fuzz")		//Se escoge el nuevo efecto
 		currentEffect = new Fuzz(DEFAULT_SAMPLE_RATE);
 	else if (newEffect == "Delay")
 		currentEffect = new Delay(DEFAULT_SAMPLE_RATE);
-	//Pa_StartStream(stream);
+	//Pa_OpenStream(&stream, &inputParameters, &outputParameters, sampleRate, framesPerBuffer,0,audioEffectCallback,this);
+	Pa_StartStream(stream);//Se vuelve a usar el stream
 }
 
 string AudioEffects::popErrorMsg()
