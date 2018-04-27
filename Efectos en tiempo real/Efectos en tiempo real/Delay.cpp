@@ -1,49 +1,90 @@
 #include "Delay.h"
 
-
+#define MAX(x,y) (x>y ? x:y)
 
 Delay::Delay(unsigned int sampleFreq)
 {
 	this->sampleFreq = sampleFreq;
 	paramNames = DELAY_PARAMETERS;
-	paramValues.resize(3, "0");
-	paramValues[0]=DELAY_DEFAULT_TYPE; //Tipo del delay
-	paramValues[1]=DELAY_DEFAULT_BASIC_DELAY_T; //
-	paramValues[2] = DELAY_DEFAULT_BASIC_ATT; //
-	prevSamplesNeeded = stof(paramValues[1]);
-	prevSamplesNeeded = (unsigned int) ((stof(paramValues[1]) * (float)(sampleFreq))+1);
-	basicAttenuation = stof(paramValues[2]) ;
-	prevInputL.resize(prevSamplesNeeded,0);
-	prevInputR.resize(prevSamplesNeeded,0);
+	paramValues = { DELAY_DEFAULT_TYPE ,DELAY_DEFAULT_TIME_D, DELAY_DEFAULT_FF, DELAY_DEFAULT_FB, DELAY_DEFAULT_BL };
+	//Para saber cuantas muestras guardar, se para que escuche las repeticiones hasta que la señal de salida sea AMPLITUDE_RELATION veces menor que la de entrada
+	unsigned int maxSamplesNeeded = (unsigned int)(abs(MAX_DELAY_TIME * (float)(sampleFreq)*log(AMPLITUDE_RELATION) / log(MAX_DELAY_GAIN)) + 1);
+	prevInputL.resize(maxSamplesNeeded,0);
+	prevInputR.resize(maxSamplesNeeded,0);
 	counter = 0;
+	saveValues();
 }
 
 bool Delay::setParam(string paramName, string paramValue)
 {
-	return false;
+	bool retVal = false;
+	float paramValuef = 0;
+	if (paramName == "Type")
+	{
+		if (paramValue == "Universal")
+		{
+			paramValues[0] = paramValue; retVal = true;
+		}
+		else
+			ErrorMsg = DELAY_TYPE_ERROR_MSG;
+	}
+	else 
+	{
+		paramValuef = stof(paramValue);
+		if (paramName == "Delay Time" )
+		{	
+			if(paramValuef >= 0 && paramValuef <= MAX_DELAY_TIME)
+			{	paramValues[1] = paramValue; retVal = true;}
+			else
+				ErrorMsg = DELAY_TIME_D_ERROR_MSG;
+		}
+		else if (paramName == "Feed Forward Coef")
+		{
+			if (paramValuef >= 0 && paramValuef <= MAX_DELAY_GAIN)
+			{
+				paramValues[2] = paramValue; retVal = true;
+			}
+			else
+				ErrorMsg = DELAY_FF_ERROR_MSG;
+		}
+		else if (paramName == "Feed Back Coef")
+		{
+			if (paramValuef >= 0 && paramValuef <= MAX_DELAY_GAIN)
+			{
+				paramValues[3] = paramValue; retVal = true;
+			}
+			else
+				ErrorMsg = DELAY_FB_ERROR_MSG;
+		}
+		else if (paramName == "Follower Coef")
+		{
+			if (paramValuef >= 0 && paramValuef <= 1)
+			{
+				paramValues[4] = paramValue; retVal = true;
+			}
+			else
+				ErrorMsg = DELAY_BL_ERROR_MSG;
+		}
+	}
+	saveValues();
+	return retVal;
 }
 
 bool Delay::Action(const float * in, float * out, unsigned int len)
 {
 	float aux;
-	if(paramValues[0]== "Basic" )
+	unsigned int delayedInputIndex=0;
+	if(paramValues[0]== "Universal" )
 	for (unsigned int i = 0; i < len; i++) //Dos veces len por ser estereo.
 	{
-		*out++ = *in + basicAttenuation * prevInputL[counter];
-		prevInputL[counter] = *in++;
-		*out++ = *in + basicAttenuation * prevInputR[counter];
-		prevInputR[counter] = *in++;
-		counter = (++counter) % prevSamplesNeeded;
-	}
-	else if(paramValues[0] == "IIR Comb Filter")
-	for (unsigned int i = 0; i < len; i++) //Dos veces len por ser estereo.
-	{
-		*out = *in + basicAttenuation * prevInputL[counter];
-		prevInputL[counter] = *out;
-		out++; in++;
-		*out = *in + basicAttenuation * prevInputR[counter];
-		prevInputR[counter] = *out;
-		out++; in++;
+		if(((int)counter - (int)nmbrOfTaps) < 0 )
+			delayedInputIndex = ((int)counter - (int)nmbrOfTaps+ (int)prevSamplesNeeded) % prevSamplesNeeded;
+		else
+			delayedInputIndex = (counter - nmbrOfTaps) % prevSamplesNeeded;
+		*out++ = bl * (*in) + (bl * fb + ff) * prevInputL[delayedInputIndex];
+		prevInputL[counter] = bl * ((*in++) + fb * prevInputL[delayedInputIndex]);
+		*out++ = bl * (*in) + (bl * fb + ff) * prevInputR[delayedInputIndex];
+		prevInputR[counter] = bl * ((*in++) + fb * prevInputR[delayedInputIndex]);
 		counter = (++counter) % prevSamplesNeeded;
 	}
 		
@@ -53,4 +94,14 @@ bool Delay::Action(const float * in, float * out, unsigned int len)
 
 Delay::~Delay()
 {
+}
+
+void Delay::saveValues()
+{
+	nmbrOfTaps = (unsigned int)(stof(paramValues[1])* (float)(sampleFreq))+1;
+	ff = stof(paramValues[2]);
+	fb = stof(paramValues[3]);
+	bl = stof(paramValues[4]);
+	prevSamplesNeeded= (unsigned int)(stof(paramValues[1])* (float)(sampleFreq)*log(AMPLITUDE_RELATION) / log(MAX(ff,fb)) + 1);
+
 }

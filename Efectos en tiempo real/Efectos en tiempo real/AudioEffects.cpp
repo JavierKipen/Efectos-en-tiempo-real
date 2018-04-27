@@ -4,7 +4,7 @@
 
 AudioEffects::AudioEffects()
 {
-	currentEffect = new Fuzz(DEFAULT_SAMPLE_RATE);
+	currentEffect = new Delay(DEFAULT_SAMPLE_RATE);
 	allEffects = LIST_OF_EFFECTS;
 	initOk = false;
 	err = Pa_Initialize();
