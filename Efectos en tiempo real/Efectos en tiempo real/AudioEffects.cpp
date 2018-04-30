@@ -4,7 +4,7 @@
 
 AudioEffects::AudioEffects()
 {
-	currentEffect = new Fuzz(DEFAULT_SAMPLE_RATE);
+	currentEffect = new Delay(DEFAULT_SAMPLE_RATE);
 	allEffects = LIST_OF_EFFECTS;
 	initOk = false;
 	err = Pa_Initialize();
@@ -57,6 +57,8 @@ void AudioEffects::pickNewEffect(string newEffect)
 		currentEffect = new Fuzz(DEFAULT_SAMPLE_RATE);
 	else if (newEffect == "Delay")
 		currentEffect = new Delay(DEFAULT_SAMPLE_RATE);
+	else if (newEffect == "Reverb")
+		currentEffect = new Reverb(DEFAULT_SAMPLE_RATE);
 	else if (newEffect == "Flanger")
 		currentEffect = new Flanger(DEFAULT_SAMPLE_RATE);
 	//Pa_OpenStream(&stream, &inputParameters, &outputParameters, sampleRate, framesPerBuffer,0,audioEffectCallback,this);

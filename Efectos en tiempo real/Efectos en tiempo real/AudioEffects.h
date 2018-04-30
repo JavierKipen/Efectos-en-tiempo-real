@@ -2,9 +2,9 @@
 #include "Effect.h"
 #include "Fuzz.h"
 #include "Delay.h"
+#include "Reverb.h"
 #include "Flanger.h"
-
-#define LIST_OF_EFFECTS {"Fuzz", "Delay", "Flanger"}
+#define LIST_OF_EFFECTS {"Fuzz", "Delay", "Reverb", "Flanger"}
 
 #define DEFAULT_SAMPLE_RATE         (44100)
 #define PA_SAMPLE_TYPE      paFloat32
