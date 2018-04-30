@@ -8,7 +8,7 @@ Delay::Delay(unsigned int sampleFreq)
 	paramNames = DELAY_PARAMETERS;
 	paramValues = { DELAY_DEFAULT_TYPE ,DELAY_DEFAULT_TIME_D, DELAY_DEFAULT_FF, DELAY_DEFAULT_FB, DELAY_DEFAULT_BL };
 	//Para saber cuantas muestras guardar, se para que escuche las repeticiones hasta que la señal de salida sea AMPLITUDE_RELATION veces menor que la de entrada
-	unsigned int maxSamplesNeeded = (unsigned int)(abs(MAX_DELAY_TIME * (float)(sampleFreq)*log(AMPLITUDE_RELATION) / log(MAX_DELAY_GAIN)) + 1);
+	maxSamplesNeeded =(unsigned int) (MAX_DELAY_TIME * (float)(sampleFreq) + 1);
 	prevInputL.resize(maxSamplesNeeded,0);
 	prevInputR.resize(maxSamplesNeeded,0);
 	counter = 0;
@@ -33,7 +33,7 @@ bool Delay::setParam(string paramName, string paramValue)
 		paramValuef = stof(paramValue);
 		if (paramName == "Delay Time" )
 		{	
-			if(paramValuef >= 0 && paramValuef <= MAX_DELAY_TIME)
+			if(paramValuef >= 0 && paramValuef <= MAX_DELAY_TIME && paramValuef > MIN_DELAY_TIME)
 			{	paramValues[1] = paramValue; retVal = true;}
 			else
 				ErrorMsg = DELAY_TIME_D_ERROR_MSG;
@@ -77,15 +77,11 @@ bool Delay::Action(const float * in, float * out, unsigned int len)
 	if(paramValues[0]== "Universal" )
 	for (unsigned int i = 0; i < len; i++) //Dos veces len por ser estereo.
 	{
-		if(((int)counter - (int)nmbrOfTaps) < 0 )
-			delayedInputIndex = ((int)counter - (int)nmbrOfTaps+ (int)prevSamplesNeeded) % prevSamplesNeeded;
-		else
-			delayedInputIndex = (counter - nmbrOfTaps) % prevSamplesNeeded;
-		*out++ = bl * (*in) + (bl * fb + ff) * prevInputL[delayedInputIndex];
-		prevInputL[counter] = bl * ((*in++) + fb * prevInputL[delayedInputIndex]);
-		*out++ = bl * (*in) + (bl * fb + ff) * prevInputR[delayedInputIndex];
-		prevInputR[counter] = bl * ((*in++) + fb * prevInputR[delayedInputIndex]);
-		counter = (++counter) % prevSamplesNeeded;
+		*out++ = bl * (*in) + (bl * fb + ff) * prevInputL[counter];
+		prevInputL[counter] = bl * ((*in++) + fb * prevInputL[counter]);
+		*out++ = bl * (*in) + (bl * fb + ff) * prevInputR[counter];
+		prevInputR[counter] = bl * ((*in++) + fb * prevInputR[counter]);
+		counter = (++counter) % nmbrOfTaps;
 	}
 		
 	return true;
@@ -102,6 +98,5 @@ void Delay::saveValues()
 	ff = stof(paramValues[2]);
 	fb = stof(paramValues[3]);
 	bl = stof(paramValues[4]);
-	prevSamplesNeeded= (unsigned int)(stof(paramValues[1])* (float)(sampleFreq)*log(AMPLITUDE_RELATION) / log(MAX(ff,fb)) + 1);
 
 }
