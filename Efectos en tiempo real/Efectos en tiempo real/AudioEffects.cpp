@@ -57,6 +57,8 @@ void AudioEffects::pickNewEffect(string newEffect)
 		currentEffect = new Fuzz(DEFAULT_SAMPLE_RATE);
 	else if (newEffect == "Delay")
 		currentEffect = new Delay(DEFAULT_SAMPLE_RATE);
+	else if (newEffect == "Reverb")
+		currentEffect = new Reverb(DEFAULT_SAMPLE_RATE);
 	//Pa_OpenStream(&stream, &inputParameters, &outputParameters, sampleRate, framesPerBuffer,0,audioEffectCallback,this);
 	Pa_StartStream(stream);//Se vuelve a usar el stream
 }
