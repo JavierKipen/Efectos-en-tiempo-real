@@ -127,6 +127,7 @@
     <ClCompile Include="Fuzz.cpp" />
     <ClCompile Include="Interface.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Flanger.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AudioEffects.h" />
@@ -144,6 +145,7 @@
     <ClInclude Include="pa_win_wdmks.h" />
     <ClInclude Include="pa_win_wmme.h" />
     <ClInclude Include="portaudio.h" />
+    <ClInclude Include="Flanger.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
