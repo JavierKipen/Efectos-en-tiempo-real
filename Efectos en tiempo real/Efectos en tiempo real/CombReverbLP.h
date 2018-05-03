@@ -1,17 +1,17 @@
 #pragma once
 #include <vector>
+#include <math.h>
 
 using namespace std;
-
-class BasicReverberator
+class CombReverbLP
 {
 public:
-	BasicReverberator(float g, unsigned int Taps);
+	CombReverbLP(float g, unsigned int Taps, float fc); //fc Normalizada!!!
 	void Action(const float *in, float *out, unsigned int len);
-	~BasicReverberator();
+	~CombReverbLP();
 private:
-	float g;
-	unsigned int Taps,counter;
+	float g,A;
+	unsigned int Taps, counter;
 	vector<float> memoryL, memoryR;
 };
 

@@ -1,8 +1,9 @@
 #include "Reverb.h"
 
 #define REVERB_TYPE_INDEX 0
-#define REVERB_SCHR_G_INDEX 1
-#define REVERB_SCHR_T_DELAY_INDEX 2
+#define REVERB_G_INDEX 1
+#define REVERB_T_DELAY_INDEX 2
+#define REVERB_FC_INDEX 3
 
 Reverb::Reverb(unsigned int sampleFreq)
 {
@@ -10,7 +11,9 @@ Reverb::Reverb(unsigned int sampleFreq)
 	paramNames = REVERB_DEFAULT_PARAM_NAMES;
 	paramValues = REVERB_DEFAULT_PARAM_VALUES;
 	saveValues();
-	Schroeder = new BasicReverberator(schroederG, nmbrOfTaps);
+	Schroeder = new BasicReverberator(g, nmbrOfTaps);
+	plane = NULL;
+	LP = NULL;
 }
 
 bool Reverb::Action(const float * in, float * out, unsigned int len)
@@ -19,7 +22,10 @@ bool Reverb::Action(const float * in, float * out, unsigned int len)
 	unsigned int delayedInputIndex = 0;
 	if (paramValues[REVERB_TYPE_INDEX] == "Schroeder")
 		Schroeder->Action(in, out, len);
-
+	else if (paramValues[REVERB_TYPE_INDEX] == "Plane")
+		plane->Action(in, out, len);
+	else if (paramValues[REVERB_TYPE_INDEX] == "LP")
+		LP->Action(in, out, len);
 	return true;
 }
 
@@ -29,16 +35,29 @@ bool Reverb::setParam(string paramName, string paramValue)
 	if (paramName == "Type")
 	{
 		if (paramValue == "Schroeder")
-		{	paramValues[REVERB_TYPE_INDEX] = paramValue; retVal = true;}
+		{	
+			paramNames = REVERB_SCHROEDER_PARAM_NAMES;
+			paramValues = REVERB_SCHROEDER_DEFAULT_PARAM_VALUES;
+			retVal = true;
+		}
+		else if (paramValue == "Plane")
+		{
+			paramNames = REVERB_PLANE_PARAM_NAMES;
+			paramValues = REVERB_PLANE_DEFAULT_PARAM_VALUES;
+			retVal = true;
+		}
+		else if (paramValue == "LP")
+		{
+			paramNames = REVERB_LP_PARAM_NAMES;
+			paramValues = REVERB_LP_DEFAULT_PARAM_VALUES;
+			retVal = true;
+		}
 	}
 	else if (paramName == "G Factor")
 	{
 		if (stof(paramValue) < REVERB_SCHROEDER_MAX_G && stof(paramValue) > 0)
 		{	
-			delete Schroeder;
-			paramValues[REVERB_SCHR_G_INDEX] = paramValue; 
-			saveValues(); 
-			Schroeder = new BasicReverberator(schroederG, nmbrOfTaps);
+			paramValues[REVERB_G_INDEX] = paramValue; 
 			retVal = true;
 		}
 		else
@@ -48,28 +67,57 @@ bool Reverb::setParam(string paramName, string paramValue)
 	{
 		if (stof(paramValue) <= REVERB_SCHROEDER_MAX_T_DELAY && stof(paramValue) > 0)
 		{
-			delete Schroeder;
-			paramValues[REVERB_SCHR_T_DELAY_INDEX] = paramValue; 
-			saveValues(); 
-			Schroeder = new BasicReverberator(schroederG, nmbrOfTaps);
+			paramValues[REVERB_T_DELAY_INDEX] = paramValue; 
 			retVal = true;
 		}
 		else
 			ErrorMsg = REVERB_T_DELAY_ERROR_MSG;
 	}
+	else if (paramName == "Cut frequency")
+	{
+		if (stof(paramValue) < sampleFreq/2.0 && stof(paramValue) > 0)
+		{
+			paramValues[REVERB_FC_INDEX] = paramValue;
+			retVal = true;
+		}
+		else
+			ErrorMsg = REVERB_FC_ERROR_MSG;
+	}
+	if (retVal == true)
+	{
+		saveValues();
+		updateReverb();
+	}
 	
 	return retVal;
 }
 
-
+void Reverb::updateReverb()
+{
+	if (paramValues[REVERB_TYPE_INDEX] == "Schroeder")
+	{	if(Schroeder != NULL)
+			delete Schroeder;
+		Schroeder = new BasicReverberator(g, nmbrOfTaps);
+	}
+	else if (paramValues[REVERB_TYPE_INDEX] == "Plane")
+	{	
+		if (plane != NULL)
+			delete plane;
+		plane = new PlaneReverb(g, nmbrOfTaps);
+	}
+	else if (paramValues[REVERB_TYPE_INDEX] == "LP")
+	{	
+		if (LP != NULL)
+		delete LP; 
+		LP = new CombReverbLP(g, nmbrOfTaps,fc/(float)sampleFreq);
+	}
+}
 void Reverb::saveValues()
 {
-	if(paramValues[REVERB_TYPE_INDEX]== "Schroeder")
-	{
-		nmbrOfTaps = unsigned int(stof(paramValues[REVERB_SCHR_T_DELAY_INDEX]) * (float)(sampleFreq)+1);
-		schroederG = stof(paramValues[REVERB_SCHR_G_INDEX]);
-	}
-	
+	nmbrOfTaps = unsigned int(stof(paramValues[REVERB_T_DELAY_INDEX]) * (float)(sampleFreq)+1);
+	g = stof(paramValues[REVERB_G_INDEX]);
+	if(paramValues[REVERB_TYPE_INDEX] == "LP")
+		fc=stof(paramValues[REVERB_FC_INDEX]);
 }
 
 Reverb::~Reverb()

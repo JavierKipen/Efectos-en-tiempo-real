@@ -63,6 +63,9 @@
     <ClCompile Include="PlaneReverb.cpp">
       <Filter>Source Files\Para efectos</Filter>
     </ClCompile>
+    <ClCompile Include="CombReverbLP.cpp">
+      <Filter>Source Files\Para efectos</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pa_asio.h">
@@ -123,6 +126,9 @@
       <Filter>Header Files\Para efectos</Filter>
     </ClInclude>
     <ClInclude Include="PlaneReverb.h">
+      <Filter>Header Files\Para efectos</Filter>
+    </ClInclude>
+    <ClInclude Include="CombReverbLP.h">
       <Filter>Header Files\Para efectos</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+using namespace std;
 class PlaneReverb
 {
 public:
