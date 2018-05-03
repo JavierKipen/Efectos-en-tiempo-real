@@ -58,7 +58,10 @@
       <Filter>Source Files\Para efectos</Filter>
     </ClCompile>
     <ClCompile Include="CombReverberator.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Para efectos</Filter>
+    </ClCompile>
+    <ClCompile Include="PlaneReverb.cpp">
+      <Filter>Source Files\Para efectos</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -117,7 +120,10 @@
       <Filter>Header Files\Para efectos</Filter>
     </ClInclude>
     <ClInclude Include="CombReverberator.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Para efectos</Filter>
+    </ClInclude>
+    <ClInclude Include="PlaneReverb.h">
+      <Filter>Header Files\Para efectos</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

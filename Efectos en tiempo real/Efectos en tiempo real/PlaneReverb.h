@@ -1,12 +1,11 @@
 #pragma once
 #include <vector>
-using namespace std;
-class CombReverberator
+class PlaneReverb
 {
 public:
-	CombReverberator(float g, unsigned int Taps);
+	PlaneReverb(float g, unsigned int Taps);
 	void Action(const float *in, float *out, unsigned int len);
-	~CombReverberator();
+	~PlaneReverb();
 private:
 	float g;
 	unsigned int Taps, counter;

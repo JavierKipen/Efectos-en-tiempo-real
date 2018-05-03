@@ -130,6 +130,7 @@
     <ClCompile Include="Interface.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Flanger.cpp" />
+    <ClCompile Include="PlaneReverb.cpp" />
     <ClCompile Include="Reverb.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -149,6 +150,7 @@
     <ClInclude Include="pa_win_waveformat.h" />
     <ClInclude Include="pa_win_wdmks.h" />
     <ClInclude Include="pa_win_wmme.h" />
+    <ClInclude Include="PlaneReverb.h" />
     <ClInclude Include="portaudio.h" />
     <ClInclude Include="Reverb.h" />
     <ClInclude Include="Flanger.h" />
