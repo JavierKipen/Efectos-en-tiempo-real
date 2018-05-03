@@ -61,6 +61,8 @@ void AudioEffects::pickNewEffect(string newEffect)
 		currentEffect = new Reverb(DEFAULT_SAMPLE_RATE);
 	else if (newEffect == "Flanger")
 		currentEffect = new Flanger(DEFAULT_SAMPLE_RATE);
+	else if (newEffect == "Chorus")
+		currentEffect = new Chorus(DEFAULT_SAMPLE_RATE);
 	//Pa_OpenStream(&stream, &inputParameters, &outputParameters, sampleRate, framesPerBuffer,0,audioEffectCallback,this);
 	Pa_StartStream(stream);//Se vuelve a usar el stream
 }

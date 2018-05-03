@@ -73,9 +73,9 @@ bool Reverb::setParam(string paramName, string paramValue)
 		else
 			ErrorMsg = REVERB_T_DELAY_ERROR_MSG;
 	}
-	else if (paramName == "Cut frequency")
+	else if (paramName == "LP Factor")
 	{
-		if (stof(paramValue) < sampleFreq/2.0 && stof(paramValue) > 0)
+		if (stof(paramValue) < 1 && stof(paramValue) > 0)
 		{
 			paramValues[REVERB_FC_INDEX] = paramValue;
 			retVal = true;
@@ -109,7 +109,7 @@ void Reverb::updateReverb()
 	{	
 		if (LP != NULL)
 		delete LP; 
-		LP = new CombReverbLP(g, nmbrOfTaps,fc/(float)sampleFreq);
+		LP = new CombReverbLP(g, nmbrOfTaps,a);
 	}
 }
 void Reverb::saveValues()
@@ -117,7 +117,7 @@ void Reverb::saveValues()
 	nmbrOfTaps = unsigned int(stof(paramValues[REVERB_T_DELAY_INDEX]) * (float)(sampleFreq)+1);
 	g = stof(paramValues[REVERB_G_INDEX]);
 	if(paramValues[REVERB_TYPE_INDEX] == "LP")
-		fc=stof(paramValues[REVERB_FC_INDEX]);
+		a=stof(paramValues[REVERB_FC_INDEX]);
 }
 
 Reverb::~Reverb()

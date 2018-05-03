@@ -1,7 +1,9 @@
 #include "Interface.h"
+#include <time.h>  
 
 void main(void)
 {
+	srand(time(NULL));
 	AudioEffects audioEffects; //Este objeto se encargará de inicializar a los efectos, e intermediará entre la interfaz y los últimos para cambiar sus parámetros
 	bool exit = false;
 	Interface interfaceA;

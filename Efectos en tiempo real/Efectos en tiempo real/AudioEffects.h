@@ -4,7 +4,8 @@
 #include "Delay.h"
 #include "Reverb.h"
 #include "Flanger.h"
-#define LIST_OF_EFFECTS {"Fuzz", "Delay", "Reverb", "Flanger"}
+#include "Chorus.h"
+#define LIST_OF_EFFECTS {"Fuzz", "Delay", "Reverb", "Flanger", "Chorus"}
 
 #define DEFAULT_SAMPLE_RATE         (44100)
 #define PA_SAMPLE_TYPE      paFloat32

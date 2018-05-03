@@ -6,14 +6,14 @@
 
 #define REVERB_SCHROEDER_PARAM_NAMES {"Type", "G Factor", "Delay Time"}
 #define REVERB_PLANE_PARAM_NAMES {"Type", "G Factor", "Delay Time"}
-#define REVERB_LP_PARAM_NAMES {"Type", "G Factor", "Delay Time", "Cut frequency"}
+#define REVERB_LP_PARAM_NAMES {"Type", "G Factor", "Delay Time", "LP Factor"}
 
 #define REVERB_DEFAULT_G "0.7"
 #define REVERB_DEFAULT_T_DELAY "0.05"
-#define REVERB_DEFAULT_FC "1000"
+#define REVERB_DEFAULT_A "0.8"
 
 #define REVERB_PLANE_DEFAULT_PARAM_VALUES {"Plane", REVERB_DEFAULT_G, REVERB_DEFAULT_T_DELAY}
-#define REVERB_LP_DEFAULT_PARAM_VALUES {"LP", REVERB_DEFAULT_G, REVERB_DEFAULT_T_DELAY,REVERB_DEFAULT_FC}
+#define REVERB_LP_DEFAULT_PARAM_VALUES {"LP", REVERB_DEFAULT_G, REVERB_DEFAULT_T_DELAY,REVERB_DEFAULT_A}
 #define REVERB_SCHROEDER_DEFAULT_PARAM_VALUES {"Schroeder", REVERB_DEFAULT_G, REVERB_DEFAULT_T_DELAY}
 
 #define REVERB_DEFAULT_PARAM_NAMES REVERB_SCHROEDER_PARAM_NAMES
@@ -41,6 +41,6 @@ private:
 	CombReverbLP * LP;
 	PlaneReverb * plane;
 	unsigned int nmbrOfTaps, nmbrOfBoxes;
-	float g,fc;
+	float g,a;
 };
 

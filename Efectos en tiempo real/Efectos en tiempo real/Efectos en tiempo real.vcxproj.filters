@@ -66,6 +66,9 @@
     <ClCompile Include="CombReverbLP.cpp">
       <Filter>Source Files\Para efectos</Filter>
     </ClCompile>
+    <ClCompile Include="Chorus.cpp">
+      <Filter>Source Files\Efectos</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pa_asio.h">
@@ -130,6 +133,9 @@
     </ClInclude>
     <ClInclude Include="CombReverbLP.h">
       <Filter>Header Files\Para efectos</Filter>
+    </ClInclude>
+    <ClInclude Include="Chorus.h">
+      <Filter>Header Files\Efectos</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
