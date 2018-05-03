@@ -88,8 +88,11 @@ vector<string> AudioEffects::getCurrParamValues()
 bool AudioEffects::setParam(string paramName, string paramValue)
 {
 	bool retVal=false;
+	Pa_StopStream(stream);
+	while ((err = Pa_IsStreamActive(stream)) != 0);
 	if (paramValue.size()!=0) //Evita valores que nunca van a tomar parámetros.
 		retVal = currentEffect->setParam(paramName, paramValue);
+	Pa_StartStream(stream);
 	return retVal;
 }
 

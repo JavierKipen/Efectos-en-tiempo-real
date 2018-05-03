@@ -12,16 +12,16 @@ Reverb::Reverb(unsigned int sampleFreq)
 	this->sampleFreq = sampleFreq;
 	paramNames = REVERB_DEFAULT_PARAM_NAMES;
 	paramValues = REVERB_DEFAULT_PARAM_VALUES;
-	maxSamplesNeeded = (unsigned int)(REVERB_SCHROEDER_MAX_T_DELAY  * (float)(sampleFreq)+1);
+	/*maxSamplesNeeded = (unsigned int)(REVERB_SCHROEDER_MAX_T_DELAY  * (float)(sampleFreq)+1);
 	prevInputL.resize(maxSamplesNeeded, 0);
 	prevInputR.resize(maxSamplesNeeded, 0);
 	for (unsigned int i = 0; i < REVERB_SCHROEDER_MAX_BOXES; i++)
 	{
 		memoryL[i].resize(maxSamplesNeeded, 0);
 		memoryR[i].resize(maxSamplesNeeded, 0);
-	}
+	}*/
 	saveValues();
-	counter = 0;
+	Schroeder = new BasicReverberator(schroederG, nmbrOfTaps);
 }
 
 bool Reverb::Action(const float * in, float * out, unsigned int len)
@@ -29,16 +29,7 @@ bool Reverb::Action(const float * in, float * out, unsigned int len)
 	float aux;
 	unsigned int delayedInputIndex = 0;
 	if (paramValues[REVERB_TYPE_INDEX] == "Schroeder")
-	{
-		for (unsigned int i = 0; i < len; i++) //Dos veces len por ser estereo.
-		{
-			*out++ = (-1) * schroederG * (*in) + prevInputL[counter] * (1 - schroederG * schroederG);
-			prevInputL[counter] = (*in++) + prevInputL[counter] * schroederG;
-			*out++ = (-1) * schroederG * (*in) + prevInputR[counter] * (1 - schroederG * schroederG);
-			prevInputR[counter] = (*in++) + prevInputR[counter] * schroederG;
-			counter = (++counter) % nmbrOfTaps;
-		}
-	}
+		Schroeder->Action(in, out, len);
 	else if (paramValues[REVERB_TYPE_INDEX] == "Multi_Schroeder")
 		computeMultipleSchroeder(in, out, len);
 
@@ -64,14 +55,26 @@ bool Reverb::setParam(string paramName, string paramValue)
 	else if (paramName == "G Factor")
 	{
 		if (stof(paramValue) < REVERB_SCHROEDER_MAX_G && stof(paramValue) > 0)
-		{	paramValues[REVERB_SCHR_G_INDEX] = paramValue; saveValues(); retVal = true;}
+		{	
+			delete Schroeder;
+			paramValues[REVERB_SCHR_G_INDEX] = paramValue; 
+			saveValues(); 
+			Schroeder = new BasicReverberator(schroederG, nmbrOfTaps);
+			retVal = true;
+		}
 		else
 			ErrorMsg = REVERB_G_ERROR_MSG;
 	}
 	else if (paramName == "Delay Time")
 	{
 		if (stof(paramValue) <= REVERB_SCHROEDER_MAX_T_DELAY && stof(paramValue) > 0)
-		{	paramValues[REVERB_SCHR_T_DELAY_INDEX] = paramValue; saveValues(); retVal = true;}
+		{
+			delete Schroeder;
+			paramValues[REVERB_SCHR_T_DELAY_INDEX] = paramValue; 
+			saveValues(); 
+			Schroeder = new BasicReverberator(schroederG, nmbrOfTaps);
+			retVal = true;
+		}
 		else
 			ErrorMsg = REVERB_T_DELAY_ERROR_MSG;
 	}

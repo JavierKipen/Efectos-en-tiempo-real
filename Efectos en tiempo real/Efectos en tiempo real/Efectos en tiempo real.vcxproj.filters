@@ -22,6 +22,12 @@
     <Filter Include="Source Files\Efectos">
       <UniqueIdentifier>{7456aec5-c983-452d-99d2-1d1ee9a055ec}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Para efectos">
+      <UniqueIdentifier>{8e6ffcd2-1d77-40ef-9433-5e74cbb4a414}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Para efectos">
+      <UniqueIdentifier>{afbddc81-d3cc-47e4-a61c-498d9216b979}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -47,6 +53,12 @@
     </ClCompile>
     <ClCompile Include="Flanger.cpp">
       <Filter>Source Files\Efectos</Filter>
+    </ClCompile>
+    <ClCompile Include="BasicReverberator.cpp">
+      <Filter>Source Files\Para efectos</Filter>
+    </ClCompile>
+    <ClCompile Include="CombReverberator.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -100,6 +112,12 @@
     </ClInclude>
     <ClInclude Include="Flanger.h">
       <Filter>Header Files\Efectos</Filter>
+    </ClInclude>
+    <ClInclude Include="BasicReverberator.h">
+      <Filter>Header Files\Para efectos</Filter>
+    </ClInclude>
+    <ClInclude Include="CombReverberator.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

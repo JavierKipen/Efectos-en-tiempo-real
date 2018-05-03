@@ -122,6 +122,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AudioEffects.cpp" />
+    <ClCompile Include="BasicReverberator.cpp" />
+    <ClCompile Include="CombReverberator.cpp" />
     <ClCompile Include="Delay.cpp" />
     <ClCompile Include="Effect.cpp" />
     <ClCompile Include="Fuzz.cpp" />
@@ -132,6 +134,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AudioEffects.h" />
+    <ClInclude Include="BasicReverberator.h" />
+    <ClInclude Include="CombReverberator.h" />
     <ClInclude Include="Delay.h" />
     <ClInclude Include="Effect.h" />
     <ClInclude Include="Fuzz.h" />

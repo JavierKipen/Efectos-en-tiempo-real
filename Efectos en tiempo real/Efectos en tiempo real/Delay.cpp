@@ -40,7 +40,7 @@ bool Delay::setParam(string paramName, string paramValue)
 		}
 		else if (paramName == "Feed Forward Coef")
 		{
-			if (paramValuef >= 0 && paramValuef <= MAX_DELAY_GAIN)
+			if (paramValuef >= -1 && paramValuef <= MAX_DELAY_GAIN)
 			{
 				paramValues[2] = paramValue; retVal = true;
 			}
@@ -49,7 +49,7 @@ bool Delay::setParam(string paramName, string paramValue)
 		}
 		else if (paramName == "Feed Back Coef")
 		{
-			if (paramValuef >= 0 && paramValuef <= MAX_DELAY_GAIN)
+			if (paramValuef >= -1 && paramValuef <= MAX_DELAY_GAIN)
 			{
 				paramValues[3] = paramValue; retVal = true;
 			}
@@ -58,7 +58,7 @@ bool Delay::setParam(string paramName, string paramValue)
 		}
 		else if (paramName == "Follower Coef")
 		{
-			if (paramValuef >= 0 && paramValuef <= 1)
+			if (paramValuef >= -1 && paramValuef <= 1)
 			{
 				paramValues[4] = paramValue; retVal = true;
 			}
