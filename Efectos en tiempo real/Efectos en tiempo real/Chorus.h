@@ -4,7 +4,7 @@
 
 #define CHORUS_DEFAULT_DELAY_T "0.005"
 #define CHORUS_DEFAULT_DEPTH_F "0.1"
-#define CHORUS_DEFAULT_LP_RATIO "0.99"
+#define CHORUS_DEFAULT_LP_RATIO "0.85"
 #define CHORUS_DEFAULT_LP_ORDER "2"
 
 #define CHORUS_MAX_DELAY_T 0.03
@@ -23,10 +23,11 @@ public:
 	~Chorus();
 private:
 	unsigned int getRandomIndex();
+	float getRandomPrev(vector<float> &mem);
 	float filterNoise(float random);
 	void saveValues();
 	int counter;
-	unsigned int nominalTaps,maxDevOfTaps;
+	unsigned int nominalTaps,maxDevOfTaps, maxTaps;
 	float fb, ff, bl,LP_PZRatio, totGain;
 	vector<float> memoryR, memoryL, LP_prevX, LP_prevY;
 };

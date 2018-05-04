@@ -25,14 +25,30 @@ Chorus::Chorus(unsigned int sampleFreq)
 bool Chorus::Action(const float * in, float * out, unsigned int len)
 {
 	unsigned int randomIndex;
+	float aux;
 		for (unsigned int i = 0; i < len; i++) //Dos veces len por ser estereo.
 	{
 		randomIndex = getRandomIndex();
-		*out++ = bl * (*in) + (bl * fb + ff) * memoryL[randomIndex];
-		memoryL[counter] = bl * ((*in++) + fb * memoryL[randomIndex]);
+		/**out++ = bl * (*in) + (bl * fb + ff) * memoryL[randomIndex];
+		memoryL[counter] = (*in++) + fb * memoryL[randomIndex];
 		*out++ = bl * (*in) + (bl * fb + ff) * memoryR[randomIndex];
-		memoryR[counter] = bl * ((*in++) + fb * memoryR[randomIndex]);
-		counter = (++counter) % nominalTaps;
+		memoryR[counter] = (*in++) + fb * memoryR[randomIndex];*/
+
+		*out++ = (*in) + fb * memoryL[randomIndex];
+		memoryL[counter] = (*in++);
+		*out++ =  (*in) + fb * memoryR[randomIndex];
+		memoryR[counter] = (*in++) ;
+
+
+		counter = (++counter) % maxTaps;
+		/*aux = getRandomPrev(memoryL);
+		*out++ = (bl * (*in)) + ((bl * fb + ff) * aux);
+		memoryL[counter] = (*in++) + fb * aux;*/
+		/*aux = getRandomPrev(memoryR);
+		*out++ = bl * (*in) + (bl * fb + ff) * aux;
+		memoryR[counter] = (*in++) + fb * aux;*/
+		if (*(out-1) > 1.0 || *(out - 2) > 1.0)
+			*out = 1.0;
 	}
 
 	return true;
@@ -77,25 +93,45 @@ bool Chorus::setParam(string paramName, string paramValue)
 Chorus::~Chorus()
 {
 }
+float Chorus::getRandomPrev(vector<float> &mem)
+{
+	float retVal;
+	unsigned int nextMem;
+	float aux = (((float)rand() / (float)RAND_MAX)*(2 * (float)maxDevOfTaps )) - (float)maxDevOfTaps; //Distribución uniforme  con centro en donde se está contando y con posible desviación de hasta maxdev para arriba y para abajo.
+	aux = filterNoise(aux);
+	aux = aux + maxDevOfTaps;
+	float newDelay = ((float)counter + aux);
+	if (newDelay > maxTaps)
+		newDelay = newDelay - maxTaps;
+	if (floor(newDelay) + 1 == nominalTaps)
+		nextMem = 0;
+	else
+		nextMem = floor(newDelay) + 1;
+	float frac = newDelay - floor(newDelay);
+	retVal = mem[nextMem] * frac + mem[floor(newDelay)] * (1 - frac);
+	return retVal;
+}
 
 unsigned int Chorus::getRandomIndex()
 {
 	unsigned int retVal;
-	float aux = (((float)rand() / (float)RAND_MAX)*(2 * (float)maxDevOfTaps + 1)) - (float)maxDevOfTaps; //Distribución uniforme  con centro en donde se está contando y con posible desviación de hasta maxdev para arriba y para abajo.
-	aux = filterNoise(aux);
-	int dev = (unsigned int)((float)counter + aux);
-	if (dev < 0)
-		retVal = (dev + (int)nominalTaps) % nominalTaps;
-	else
-		retVal = dev % nominalTaps;
+	float aux = (((float)rand() / (float)RAND_MAX)*(2 * (float)maxDevOfTaps )); //Distribución uniforme  con centro en donde se está contando y con posible desviación de hasta maxdev para arriba y para abajo.
+	aux = filterNoise(aux) + maxDevOfTaps;
+	int dev = (int)((float)counter + aux);
+	retVal = dev % maxTaps;
 	
 	return retVal;
 }
 
 float Chorus::filterNoise(float random)
 {
-	float retVal = totGain * (random + LP_PZRatio * LP_prevX[0] + LP_PZRatio * LP_prevY[0]); //Por ahora orden 1.
+	/*float retVal = totGain * (random + LP_PZRatio * LP_prevX[0] + LP_PZRatio * LP_prevY[0]); //Por ahora orden 1.
 	LP_prevX[0] = random;
+	LP_prevY[0] = retVal;*/ //Este es orden 1.
+	float retVal = totGain * (random + 2 * LP_PZRatio * LP_prevX[0] + LP_PZRatio * LP_PZRatio * LP_prevX[1] + 2 * LP_PZRatio * LP_prevY[0]- LP_PZRatio * LP_PZRatio * LP_prevY[1]); //Por ahora orden 1.
+	LP_prevX[1] = LP_prevX[0];
+	LP_prevX[0] = random;
+	LP_prevY[1] = LP_prevY[0];
 	LP_prevY[0] = retVal;
 	return retVal;
 }
@@ -108,5 +144,7 @@ void Chorus::saveValues()
 	if (maxDevOfTaps == 0)
 		maxDevOfTaps = 1;
 	LP_PZRatio = stof(paramValues[CHORUS_RATIO_INDEX]);
-	totGain = (1 - LP_PZRatio) / (1 + LP_PZRatio);
+	//totGain = (1 - LP_PZRatio) / (1 + LP_PZRatio); Orden 1
+	totGain = pow(((1 - LP_PZRatio) / (1 + LP_PZRatio)),2); //Orden 2
+	maxTaps = nominalTaps + maxDevOfTaps;
 }

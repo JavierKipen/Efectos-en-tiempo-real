@@ -101,6 +101,18 @@ bool AudioEffects::setParam(string paramName, string paramValue)
 bool AudioEffects::Action(const float * in, float * out, unsigned int len)
 {
 	return currentEffect->Action(in,out,len);
+	/*for (unsigned int i = 0; i < len; i++) //Dos veces len por ser estereo.
+	{
+		*out = 2*(*in++);
+		if (*out > 1.0)
+			*out = 1.0;
+		out++;
+		*out = 2 * (*in++);
+		if (*out > 1.0)
+			*out = 1.0;
+		out++;
+	}
+	return true;*/
 }
 
 vector<string> AudioEffects::getListOfEffects()
