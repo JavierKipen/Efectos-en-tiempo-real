@@ -1,26 +1,25 @@
 #include "Chorus.h"
 
-#define CHORUS_DELAY_T_INDEX 0
-#define CHORUS_DEPTH_INDEX 1
-#define CHORUS_RATIO_INDEX 2
-
+#define CHORUS_MODEL_INDEX 0
+#define CHORUS_DELAY_T_INDEX 1
+#define CHORUS_DEPTH_INDEX 2
+#define CHORUS_LFO_FREQ_INDEX 3
+#define CHORUS_LFO_TYPE_INDEX 4
 
 Chorus::Chorus(unsigned int sampleFreq)
 {
 	this->sampleFreq = sampleFreq;
-	ff = 1;
-	bl = 0.7;
-	fb = 0.7;
 	paramNames = CHORUS_PARAMETERS;
 	paramValues = CHORUS_DEFAULT_PARAM_VALUES;
-	unsigned int maxSamplesNeeded = (unsigned int)(CHORUS_MAX_DELAY_T * (float)(sampleFreq)+1);
+	unsigned int maxSamplesNeeded = (unsigned int)(CHORUS_MAX_DELAY_T *2 * (float)(sampleFreq)+1); //*2 por que con un depth de 1 tiene un desvío de max delay, para max delay.
 	memoryL.resize(maxSamplesNeeded, 0);
 	memoryR.resize(maxSamplesNeeded, 0);
-	LP_prevX.resize(CHORUS_MAX_LP_ORDER, 0);
-	LP_prevY.resize(CHORUS_MAX_LP_ORDER, 0);
+	//LP_prevX.resize(CHORUS_MAX_LP_ORDER, 0);
+	//LP_prevY.resize(CHORUS_MAX_LP_ORDER, 0);
 	counter = 0;
-	saveValues();
 	sampleCount = 0;
+	saveValues();
+	
 }
 
 bool Chorus::Action(const float * in, float * out, unsigned int len)
@@ -47,14 +46,24 @@ bool Chorus::Action(const float * in, float * out, unsigned int len)
 		*out++ = bl * (*in) + (bl * fb + ff) * aux;
 		memoryR[counter] = (*in++) + fb * aux;*/
 		calculateEcho();
-		*out++ = (*in) + fb * echoL;
-		memoryL[counter] = (*in++);
-		*out++ = (*in) + fb * echoR;
-		memoryR[counter] = (*in++);
+		if (paramValues[CHORUS_MODEL_INDEX] == "Basic")
+		{
+			*out++ = bl*((*in) + fb * echoL);
+			memoryL[counter] = (*in++);
+			*out++ = bl*((*in) + fb * echoR);
+			memoryR[counter] = (*in++);
+		}
+		else if (paramValues[CHORUS_MODEL_INDEX] == "Full")
+		{
+			*out++ = (bl * (*in)) + ((bl * fb + ff) * echoL);
+			memoryL[counter] = (*in++) + fb * echoL;
+			*out++ = bl * (*in) + (bl * fb + ff) * echoR;
+			memoryR[counter] = (*in++) + fb * echoR;
+		}
 		counter = (++counter) % maxTaps;
 		sampleCount++;
-		if (*(out-1) > 1.0 || *(out - 2) > 1.0)
-			*out = 1.0;
+		/*if (*(out-1) > 1.0 || *(out - 2) > 1.0)
+			*out = 1.0;*/
 	}
 
 	return true;
@@ -63,34 +72,58 @@ bool Chorus::Action(const float * in, float * out, unsigned int len)
 bool Chorus::setParam(string paramName, string paramValue)
 {
 	bool retVal=false;
-	float paramValuef = stof(paramValue);
-	if (paramName == "Delay Time")
+	
+	if (paramName == "Model Type")
 	{
-		if (paramValuef >= 0.001 && paramValuef <= CHORUS_MAX_DELAY_T )
+		if(paramValue == "Basic" || paramValue=="Full")
 		{
-			paramValues[CHORUS_DELAY_T_INDEX] = paramValue; retVal = true;
+			paramValues[CHORUS_MODEL_INDEX] = paramValue; 
+			retVal = true;
 		}
 		else
 			ErrorMsg = "WIP";
 	}
-	else if (paramName == "Depth Factor")
+	else if (paramName == "LFO Type")
 	{
-		if (paramValuef > 0 && paramValuef < 1)
+		if (paramValue == "Sine" )
 		{
-			paramValues[CHORUS_DEPTH_INDEX] = paramValue; retVal = true;
+			paramValues[CHORUS_LFO_TYPE_INDEX] = paramValue;
+			retVal = true;
 		}
 		else
 			ErrorMsg = "WIP";
 	}
-	else if (paramName == "LP P/Z Ratio")
-	{
-		if (paramValuef > 0 && paramValuef < 1)
+	else {
+		float paramValuef = stof(paramValue);
+		if (paramName == "Delay Time")
 		{
-			paramValues[CHORUS_RATIO_INDEX] = paramValue; retVal = true;
+			if (paramValuef >= CHORUS_MIN_DELAY_T && paramValuef <= CHORUS_MAX_DELAY_T)
+			{
+				paramValues[CHORUS_DELAY_T_INDEX] = paramValue; retVal = true;
+			}
+			else
+				ErrorMsg = "WIP";
 		}
-		else
-			ErrorMsg = "WIP";
+		else if (paramName == "Depth Factor")
+		{
+			if (paramValuef > 0 && paramValuef < 1)
+			{
+				paramValues[CHORUS_DEPTH_INDEX] = paramValue; retVal = true;
+			}
+			else
+				ErrorMsg = "WIP";
+		}
+		else if (paramName == "LFO Freq")
+		{
+			if (paramValuef >= CHORUS_MIN_LFO_FREQ && paramValuef <= CHORUS_MAX_LFO_FREQ)
+			{
+				paramValues[CHORUS_LFO_FREQ_INDEX] = paramValue; retVal = true;
+			}
+			else
+				ErrorMsg = "WIP";
+		}
 	}
+	
 	if (retVal == true)
 		saveValues();
 	return retVal;
@@ -101,7 +134,9 @@ Chorus::~Chorus()
 }
 void Chorus::calculateEcho()
 {
-	float sampleIndex = sin(2 * 3.14159265 * lfoFreq * (float)sampleCount / sampleFreq)  * (float)maxDevOfTaps + maxDevOfTaps; //Calculo la desviación que tendrá para el sample dado
+	float sampleIndex;
+	if(paramValues[CHORUS_LFO_TYPE_INDEX] == "Sine")
+		sampleIndex = sin(2 * 3.14159265 * lfoFreq * (float)sampleCount / sampleFreq)  * (float)maxDevOfTaps + maxDevOfTaps; //Calculo la desviación que tendrá para el sample dado
 	sampleIndex = counter + sampleIndex;
 	if(sampleIndex > maxTaps)
 		sampleIndex = sampleIndex - maxTaps;
@@ -112,7 +147,7 @@ void Chorus::calculateEcho()
 	float frac = sampleIndex - floor(sampleIndex);//Fracción del error
 	echoL = memoryL[indexOfnewerSample] * frac + memoryL[indexOfolderSample] * (1 - frac);
 	echoR = memoryR[indexOfnewerSample] * frac + memoryR[indexOfolderSample] * (1 - frac);
-}
+}/*
 float Chorus::getRandomPrev(vector<float> &mem)
 {
 	float retVal;
@@ -130,8 +165,8 @@ float Chorus::getRandomPrev(vector<float> &mem)
 	float frac = newDelay - floor(newDelay);
 	retVal = mem[nextMem] * frac + mem[floor(newDelay)] * (1 - frac);
 	return retVal;
-}
-
+}*/
+/*
 unsigned int Chorus::getRandomIndex()
 {
 	unsigned int retVal;
@@ -141,31 +176,43 @@ unsigned int Chorus::getRandomIndex()
 	retVal = dev % maxTaps;
 	
 	return retVal;
-}
-
+}*/
+/*
 float Chorus::filterNoise(float random)
 {
 	/*float retVal = totGain * (random + LP_PZRatio * LP_prevX[0] + LP_PZRatio * LP_prevY[0]); //Por ahora orden 1.
 	LP_prevX[0] = random;
-	LP_prevY[0] = retVal;*/ //Este es orden 1.
+	LP_prevY[0] = retVal; //Este es orden 1.
 	float retVal = totGain * (random + 2 * LP_PZRatio * LP_prevX[0] + LP_PZRatio * LP_PZRatio * LP_prevX[1] + 2 * LP_PZRatio * LP_prevY[0]- LP_PZRatio * LP_PZRatio * LP_prevY[1]); //Por ahora orden 1.
 	LP_prevX[1] = LP_prevX[0];
 	LP_prevX[0] = random;
 	LP_prevY[1] = LP_prevY[0];
 	LP_prevY[0] = retVal;
 	return retVal;
-}
+}*/
 
 void Chorus::saveValues()
 {
-	float aux = stof(paramValues[CHORUS_DELAY_T_INDEX]);
-	nominalTaps = (unsigned int)(stof(paramValues[CHORUS_DELAY_T_INDEX]) * (float)(sampleFreq));
-	maxDevOfTaps = (unsigned int)(stof(paramValues[CHORUS_DELAY_T_INDEX]) * stof(paramValues[CHORUS_DEPTH_INDEX]) * (float)(sampleFreq));
+	float aux = stof(paramValues[CHORUS_DELAY_T_INDEX])/1000.0; //Porque estaba en milisegundos.
+	nominalTaps = (unsigned int)(aux * (float)(sampleFreq));
+	maxDevOfTaps = (unsigned int)(aux * stof(paramValues[CHORUS_DEPTH_INDEX]) * (float)(sampleFreq));
 	if (maxDevOfTaps == 0)
 		maxDevOfTaps = 1;
-	LP_PZRatio = stof(paramValues[CHORUS_RATIO_INDEX]);
-	//totGain = (1 - LP_PZRatio) / (1 + LP_PZRatio); Orden 1
-	totGain = pow(((1 - LP_PZRatio) / (1 + LP_PZRatio)),2); //Orden 2
 	maxTaps = nominalTaps + maxDevOfTaps;
 	lfoFreq = stof(CHORUS_DEFAULT_LFO_FREQ);
+	if (paramValues[CHORUS_MODEL_INDEX] == "Basic")
+	{
+		bl = 0.7;
+		fb = -0.1;
+		ff = 1;
+	}
+	else
+	{
+		bl = 0.5;
+		fb = 1;
+	}
+	//LP_PZRatio = stof(paramValues[CHORUS_RATIO_INDEX]);
+	//totGain = (1 - LP_PZRatio) / (1 + LP_PZRatio); Orden 1
+	//totGain = pow(((1 - LP_PZRatio) / (1 + LP_PZRatio)),2); //Orden 2
+	
 }
