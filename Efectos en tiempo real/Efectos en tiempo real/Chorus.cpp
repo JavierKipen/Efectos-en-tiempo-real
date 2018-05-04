@@ -10,7 +10,7 @@ Chorus::Chorus(unsigned int sampleFreq)
 	this->sampleFreq = sampleFreq;
 	ff = 1;
 	bl = 0.7;
-	fb = -0.7;
+	fb = 0.7;
 	paramNames = CHORUS_PARAMETERS;
 	paramValues = CHORUS_DEFAULT_PARAM_VALUES;
 	unsigned int maxSamplesNeeded = (unsigned int)(CHORUS_MAX_DELAY_T * (float)(sampleFreq)+1);
@@ -20,33 +20,39 @@ Chorus::Chorus(unsigned int sampleFreq)
 	LP_prevY.resize(CHORUS_MAX_LP_ORDER, 0);
 	counter = 0;
 	saveValues();
+	sampleCount = 0;
 }
 
 bool Chorus::Action(const float * in, float * out, unsigned int len)
 {
 	unsigned int randomIndex;
 	float aux;
-		for (unsigned int i = 0; i < len; i++) //Dos veces len por ser estereo.
+	for (unsigned int i = 0; i < len; i++) //Dos veces len por ser estereo.
 	{
-		randomIndex = getRandomIndex();
+		//randomIndex = getRandomIndex();
 		/**out++ = bl * (*in) + (bl * fb + ff) * memoryL[randomIndex];
 		memoryL[counter] = (*in++) + fb * memoryL[randomIndex];
 		*out++ = bl * (*in) + (bl * fb + ff) * memoryR[randomIndex];
 		memoryR[counter] = (*in++) + fb * memoryR[randomIndex];*/
 
-		*out++ = (*in) + fb * memoryL[randomIndex];
+		/**out++ = (*in) + fb * memoryL[randomIndex];
 		memoryL[counter] = (*in++);
 		*out++ =  (*in) + fb * memoryR[randomIndex];
 		memoryR[counter] = (*in++) ;
-
-
-		counter = (++counter) % maxTaps;
+		counter = (++counter) % maxTaps;*/
 		/*aux = getRandomPrev(memoryL);
 		*out++ = (bl * (*in)) + ((bl * fb + ff) * aux);
 		memoryL[counter] = (*in++) + fb * aux;*/
 		/*aux = getRandomPrev(memoryR);
 		*out++ = bl * (*in) + (bl * fb + ff) * aux;
 		memoryR[counter] = (*in++) + fb * aux;*/
+		calculateEcho();
+		*out++ = (*in) + fb * echoL;
+		memoryL[counter] = (*in++);
+		*out++ = (*in) + fb * echoR;
+		memoryR[counter] = (*in++);
+		counter = (++counter) % maxTaps;
+		sampleCount++;
 		if (*(out-1) > 1.0 || *(out - 2) > 1.0)
 			*out = 1.0;
 	}
@@ -56,7 +62,7 @@ bool Chorus::Action(const float * in, float * out, unsigned int len)
 
 bool Chorus::setParam(string paramName, string paramValue)
 {
-	bool retVal;
+	bool retVal=false;
 	float paramValuef = stof(paramValue);
 	if (paramName == "Delay Time")
 	{
@@ -92,6 +98,20 @@ bool Chorus::setParam(string paramName, string paramValue)
 
 Chorus::~Chorus()
 {
+}
+void Chorus::calculateEcho()
+{
+	float sampleIndex = sin(2 * 3.14159265 * lfoFreq * (float)sampleCount / sampleFreq)  * (float)maxDevOfTaps + maxDevOfTaps; //Calculo la desviación que tendrá para el sample dado
+	sampleIndex = counter + sampleIndex;
+	if(sampleIndex > maxTaps)
+		sampleIndex = sampleIndex - maxTaps;
+	unsigned int indexOfolderSample = floor(sampleIndex);
+	unsigned int  indexOfnewerSample = floor(sampleIndex)+1;
+	if (indexOfnewerSample == maxTaps)
+		indexOfnewerSample = 0;
+	float frac = sampleIndex - floor(sampleIndex);//Fracción del error
+	echoL = memoryL[indexOfnewerSample] * frac + memoryL[indexOfolderSample] * (1 - frac);
+	echoR = memoryR[indexOfnewerSample] * frac + memoryR[indexOfolderSample] * (1 - frac);
 }
 float Chorus::getRandomPrev(vector<float> &mem)
 {
@@ -147,4 +167,5 @@ void Chorus::saveValues()
 	//totGain = (1 - LP_PZRatio) / (1 + LP_PZRatio); Orden 1
 	totGain = pow(((1 - LP_PZRatio) / (1 + LP_PZRatio)),2); //Orden 2
 	maxTaps = nominalTaps + maxDevOfTaps;
+	lfoFreq = stof(CHORUS_DEFAULT_LFO_FREQ);
 }

@@ -2,10 +2,11 @@
 #include "Effect.h"
 #include <vector>
 
-#define CHORUS_DEFAULT_DELAY_T "0.005"
-#define CHORUS_DEFAULT_DEPTH_F "0.1"
+#define CHORUS_DEFAULT_DELAY_T "0.01"
+#define CHORUS_DEFAULT_DEPTH_F "0.2"
 #define CHORUS_DEFAULT_LP_RATIO "0.85"
 #define CHORUS_DEFAULT_LP_ORDER "2"
+#define CHORUS_DEFAULT_LFO_FREQ "2"
 
 #define CHORUS_MAX_DELAY_T 0.03
 #define CHORUS_MAX_LP_ORDER 5
@@ -23,12 +24,14 @@ public:
 	~Chorus();
 private:
 	unsigned int getRandomIndex();
+	void calculateEcho();
 	float getRandomPrev(vector<float> &mem);
 	float filterNoise(float random);
 	void saveValues();
 	int counter;
+	long unsigned int sampleCount;
 	unsigned int nominalTaps,maxDevOfTaps, maxTaps;
-	float fb, ff, bl,LP_PZRatio, totGain;
+	float fb, ff, bl,LP_PZRatio, totGain, echoL, echoR, lfoFreq;
 	vector<float> memoryR, memoryL, LP_prevX, LP_prevY;
 };
 
