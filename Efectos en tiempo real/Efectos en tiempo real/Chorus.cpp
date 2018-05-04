@@ -202,8 +202,8 @@ void Chorus::saveValues()
 	lfoFreq = stof(CHORUS_DEFAULT_LFO_FREQ);
 	if (paramValues[CHORUS_MODEL_INDEX] == "Basic")
 	{
-		bl = 0.7;
-		fb = -0.1;
+		bl = 0.5;
+		fb = 1;
 		ff = 1;
 	}
 	else
