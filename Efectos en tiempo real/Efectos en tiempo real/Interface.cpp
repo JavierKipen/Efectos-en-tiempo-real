@@ -84,8 +84,11 @@ bool Interface::handleFirstMenu(unsigned int optChosen)
 		optionsToPrint.push_back(CANCEL);
 		valuesOfOptions = A->getCurrParamValues();
 	}
-	else if (optionsToPrint[optChosen]==EXIT)
+	else if (optionsToPrint[optChosen] == EXIT)
+	{
 		retVal = true;
+		A->stopPlaying(); //En el caso de salir se le pide a los efectos de audio que corten el stream
+	}
 	if (!retVal)
 		printMenu(); //En caso de que no se haya escogido cerrar el programa, se limpiará la consola.
 	return retVal;

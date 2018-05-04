@@ -47,6 +47,12 @@ bool AudioEffects::startPlaying()
 	err = Pa_StartStream(stream);
 	return err == paNoError;
 }
+void AudioEffects::stopPlaying()
+{
+	Pa_StopStream(stream);
+	while ((err = Pa_IsStreamActive(stream)) != 0);
+	delete currentEffect;
+}
 void AudioEffects::pickNewEffect(string newEffect)
 {
 	unsigned int sampleRate = DEFAULT_SAMPLE_RATE, framesPerBuffer = DEFAULT_FRAMES_PER_BUFFER;
@@ -126,6 +132,7 @@ vector<string> AudioEffects::getListOfEffects()
 
 AudioEffects::~AudioEffects()
 {
+	Pa_Terminate();
 }
 
 

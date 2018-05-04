@@ -16,6 +16,7 @@ class AudioEffects
 public:
 	AudioEffects();
 	bool startPlaying();
+	void stopPlaying(); //Termina el stream.
 	vector<string> getCurrParamNames(); //Devuelve los nombres de los parámetros del efecto actual.
 	vector<string> getCurrParamValues();//Devuelve los valores de los parámetros del efecto actual.
 	bool setParam(string paramName, string paramValue); //Setea un parametro del efecto actual, devuelve false si el valor no es válido (depende da cada parámetro).
