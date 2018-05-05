@@ -62,8 +62,6 @@ bool Chorus::Action(const float * in, float * out, unsigned int len)
 		}
 		counter = (++counter) % maxTaps;
 		sampleCount++;
-		/*if (*(out-1) > 1.0 || *(out - 2) > 1.0)
-			*out = 1.0;*/
 	}
 
 	return true;

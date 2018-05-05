@@ -134,6 +134,7 @@
     <ClCompile Include="Flanger.cpp" />
     <ClCompile Include="PlaneReverb.cpp" />
     <ClCompile Include="Reverb.cpp" />
+    <ClCompile Include="Vibrato.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AudioEffects.h" />
@@ -158,6 +159,7 @@
     <ClInclude Include="portaudio.h" />
     <ClInclude Include="Reverb.h" />
     <ClInclude Include="Flanger.h" />
+    <ClInclude Include="Vibrato.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

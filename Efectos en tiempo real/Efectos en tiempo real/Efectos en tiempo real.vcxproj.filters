@@ -69,6 +69,9 @@
     <ClCompile Include="Chorus.cpp">
       <Filter>Source Files\Efectos</Filter>
     </ClCompile>
+    <ClCompile Include="Vibrato.cpp">
+      <Filter>Source Files\Efectos</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pa_asio.h">
@@ -135,6 +138,9 @@
       <Filter>Header Files\Para efectos</Filter>
     </ClInclude>
     <ClInclude Include="Chorus.h">
+      <Filter>Header Files\Efectos</Filter>
+    </ClInclude>
+    <ClInclude Include="Vibrato.h">
       <Filter>Header Files\Efectos</Filter>
     </ClInclude>
   </ItemGroup>
