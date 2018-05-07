@@ -71,6 +71,8 @@ void AudioEffects::pickNewEffect(string newEffect)
 		currentEffect = new Chorus(DEFAULT_SAMPLE_RATE);
 	else if (newEffect == "Vibrato")
 		currentEffect = new Vibrato(DEFAULT_SAMPLE_RATE);
+	else if (newEffect == "Phaser")
+		currentEffect = new Phaser(DEFAULT_SAMPLE_RATE);
 	//Pa_OpenStream(&stream, &inputParameters, &outputParameters, sampleRate, framesPerBuffer,0,audioEffectCallback,this);
 	Pa_StartStream(stream);//Se vuelve a usar el stream
 }

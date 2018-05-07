@@ -2,11 +2,11 @@
 #include "Effect.h"
 #include "VarBRFilter.h"
 
-#define PHASER_DEFAULT_N_FILTERS "2"
-#define PHASER_DEFAULT_GB "0.1"
-#define PHASER_DEFAULT_DEPTH "0.5"
-#define PHASER_DEFAULT_SWEEP_WIDTH "0.5"
-#define PHASER_DEFAULT_Q "15"
+#define PHASER_DEFAULT_N_FILTERS "5"
+#define PHASER_DEFAULT_GB "0.5"
+#define PHASER_DEFAULT_DEPTH "1"
+#define PHASER_DEFAULT_SWEEP_WIDTH "1"
+#define PHASER_DEFAULT_Q "2"
 #define PHASER_DEFAULT_LFO_FREQ "1"
 
 #define PHASER_PARAM_NAMES {"Depth", "Sweep Width", "LFO Freq","Number Of Filters","Q", "GB"}
@@ -18,6 +18,7 @@ class Phaser :
 public:
 	Phaser(unsigned int sampleFreq);
 	bool Action(const float * in, float * out, unsigned int len);
+	bool setParam(string paramName, string paramValue);
 	~Phaser();
 private:
 	void saveValues();

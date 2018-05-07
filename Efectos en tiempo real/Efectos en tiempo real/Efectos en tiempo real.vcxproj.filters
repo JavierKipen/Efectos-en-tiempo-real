@@ -76,10 +76,10 @@
       <Filter>Source Files\Para efectos</Filter>
     </ClCompile>
     <ClCompile Include="VarBRFilter.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Para efectos</Filter>
     </ClCompile>
     <ClCompile Include="Phaser.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Efectos</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -156,10 +156,10 @@
       <Filter>Header Files\Para efectos</Filter>
     </ClInclude>
     <ClInclude Include="VarBRFilter.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Para efectos</Filter>
     </ClInclude>
     <ClInclude Include="Phaser.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Efectos</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

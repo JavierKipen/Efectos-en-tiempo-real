@@ -11,14 +11,16 @@ public:
 	BandRejectIIROrder2();
 	void setSampleFreq(float sf);
 	void setNmbrOfCoefsPreCalc(unsigned int n);
-	void setParameters(float * freqsNorm, float gb, float Q);
+	void setParameters(float * freqsNorm, float R);
 	void filter(float *in, float *out, unsigned int len, unsigned int i); //i indica que coeficientes utilizará.
 	~BandRejectIIROrder2();
 private:
 	void reserveMemory();
 	unsigned int nmbrOfCoefsPreCalc;
 	float sampleFreq, e,p;
-	vector<vector<float>> coefs; //Cada vector contendra un vector con los coeficientes para el filtro de la iésima frecuencia.
+	vector<vector<float>> coefsX; //Cada vector contendra un vector con los coeficientes para el filtro de la iésima frecuencia.
+	vector<vector<float>> coefsY;
+	vector<float > gains;
 	float memoryXL[NUMER_OF_COEFS], memoryXR[NUMER_OF_COEFS];
 	float memoryYL[NUMER_OF_COEFS], memoryYR[NUMER_OF_COEFS];
 };
