@@ -122,6 +122,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AudioEffects.cpp" />
+    <ClCompile Include="BandRejectIIROrder2.cpp" />
     <ClCompile Include="BasicReverberator.cpp" />
     <ClCompile Include="Chorus.cpp" />
     <ClCompile Include="CombReverberator.cpp" />
@@ -132,12 +133,15 @@
     <ClCompile Include="Interface.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Flanger.cpp" />
+    <ClCompile Include="Phaser.cpp" />
     <ClCompile Include="PlaneReverb.cpp" />
     <ClCompile Include="Reverb.cpp" />
+    <ClCompile Include="VarBRFilter.cpp" />
     <ClCompile Include="Vibrato.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AudioEffects.h" />
+    <ClInclude Include="BandRejectIIROrder2.h" />
     <ClInclude Include="BasicReverberator.h" />
     <ClInclude Include="Chorus.h" />
     <ClInclude Include="CombReverberator.h" />
@@ -155,10 +159,12 @@
     <ClInclude Include="pa_win_waveformat.h" />
     <ClInclude Include="pa_win_wdmks.h" />
     <ClInclude Include="pa_win_wmme.h" />
+    <ClInclude Include="Phaser.h" />
     <ClInclude Include="PlaneReverb.h" />
     <ClInclude Include="portaudio.h" />
     <ClInclude Include="Reverb.h" />
     <ClInclude Include="Flanger.h" />
+    <ClInclude Include="VarBRFilter.h" />
     <ClInclude Include="Vibrato.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

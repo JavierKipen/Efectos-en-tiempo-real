@@ -72,6 +72,15 @@
     <ClCompile Include="Vibrato.cpp">
       <Filter>Source Files\Efectos</Filter>
     </ClCompile>
+    <ClCompile Include="BandRejectIIROrder2.cpp">
+      <Filter>Source Files\Para efectos</Filter>
+    </ClCompile>
+    <ClCompile Include="VarBRFilter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Phaser.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pa_asio.h">
@@ -142,6 +151,15 @@
     </ClInclude>
     <ClInclude Include="Vibrato.h">
       <Filter>Header Files\Efectos</Filter>
+    </ClInclude>
+    <ClInclude Include="BandRejectIIROrder2.h">
+      <Filter>Header Files\Para efectos</Filter>
+    </ClInclude>
+    <ClInclude Include="VarBRFilter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Phaser.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
