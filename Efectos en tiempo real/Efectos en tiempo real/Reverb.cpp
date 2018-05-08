@@ -11,8 +11,8 @@ Reverb::Reverb(unsigned int sampleFreq)
 	paramNames = REVERB_DEFAULT_PARAM_NAMES;
 	paramValues = REVERB_DEFAULT_PARAM_VALUES;
 	saveValues();
-	Schroeder = new BasicReverberator(g, nmbrOfTaps);
-	plane = NULL;
+	Schroeder = NULL;
+	plane = new PlaneReverb(g,nmbrOfTaps);
 	LP = NULL;
 }
 
@@ -116,8 +116,8 @@ void Reverb::saveValues()
 {
 	nmbrOfTaps = unsigned int(stof(paramValues[REVERB_T_DELAY_INDEX]) * (float)(sampleFreq)+1);
 	g = stof(paramValues[REVERB_G_INDEX]);
-	if(paramValues[REVERB_TYPE_INDEX] == "LP")
-		a=stof(paramValues[REVERB_FC_INDEX]);
+	if (paramValues[REVERB_TYPE_INDEX] == "LP")
+		a = stof(paramValues[REVERB_FC_INDEX]);
 }
 
 Reverb::~Reverb()
