@@ -14,6 +14,10 @@
 #define MAX_LFO_FREQ 15
 #define MIN_LFO_FREQ 0.1
 
+#define VIBRATO_LFO_FREQ_ERROR_MSG "The LFO Freq must be between 0.1Hz and 15Hz."
+#define VIBRATO_MAX_DELAY_ERROR_MSG "The time delay must go between 0.2ms and 5ms"
+#define VIBRATO_LFO_TYPE_ERROR_MSG "The avaiable LFO Types are Sine and Triang"
+
 class Vibrato :
 	public Effect
 {

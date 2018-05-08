@@ -4,7 +4,6 @@
 #define VIBRATO_MAX_DELAY_INDEX 1
 #define VIBRATO_LFO_TYPE_INDEX 2
 
-#define GEN_MOD(x,y) ((x)-(floor(((x)/(y)))*y))
 
 
 Vibrato::Vibrato(unsigned int sampleFreq)
@@ -56,7 +55,7 @@ bool Vibrato::setParam(string paramName, string paramValue)
 			paramValues[VIBRATO_LFO_TYPE_INDEX] = paramValue; retVal = true;
 		}
 		else
-			ErrorMsg = "WIP";
+			ErrorMsg = VIBRATO_LFO_TYPE_ERROR_MSG;
 	}
 	else
 	{
@@ -68,7 +67,7 @@ bool Vibrato::setParam(string paramName, string paramValue)
 				paramValues[VIBRATO_MAX_DELAY_INDEX] = paramValue; retVal = true;
 			}
 			else
-				ErrorMsg = "WIP";
+				ErrorMsg = VIBRATO_MAX_DELAY_ERROR_MSG;
 		}
 		else if (paramName == "LFO Freq")
 		{
@@ -77,7 +76,7 @@ bool Vibrato::setParam(string paramName, string paramValue)
 				paramValues[VIBRATO_LFO_FREQ_INDEX] = paramValue; retVal = true;
 			}
 			else
-				ErrorMsg = "WIP";
+				ErrorMsg = VIBRATO_LFO_FREQ_ERROR_MSG;
 		}
 	}
 	if (retVal == true)

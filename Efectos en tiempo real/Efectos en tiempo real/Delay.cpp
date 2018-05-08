@@ -6,7 +6,7 @@ Delay::Delay(unsigned int sampleFreq)
 {
 	this->sampleFreq = sampleFreq;
 	paramNames = DELAY_PARAMETERS;
-	paramValues = { DELAY_DEFAULT_TYPE ,DELAY_DEFAULT_TIME_D, DELAY_DEFAULT_FF, DELAY_DEFAULT_FB, DELAY_DEFAULT_BL };
+	paramValues = {DELAY_DEFAULT_TIME_D, DELAY_DEFAULT_FF, DELAY_DEFAULT_FB, DELAY_DEFAULT_BL };
 	//Para saber cuantas muestras guardar, se para que escuche las repeticiones hasta que la señal de salida sea AMPLITUDE_RELATION veces menor que la de entrada
 	maxSamplesNeeded =(unsigned int) (MAX_DELAY_TIME * (float)(sampleFreq) + 1);
 	prevInputL.resize(maxSamplesNeeded,0);
@@ -19,52 +19,40 @@ bool Delay::setParam(string paramName, string paramValue)
 {
 	bool retVal = false;
 	float paramValuef = 0;
-	if (paramName == "Type")
+	paramValuef = stof(paramValue);
+	if (paramName == "Delay Time" )
+	{	
+		if(paramValuef >= 0 && paramValuef <= MAX_DELAY_TIME && paramValuef > MIN_DELAY_TIME)
+		{	paramValues[1] = paramValue; retVal = true;}
+		else
+			ErrorMsg = DELAY_TIME_D_ERROR_MSG;
+	}
+	else if (paramName == "Feed Forward Coef")
 	{
-		if (paramValue == "Universal")
+		if (paramValuef >= -1 && paramValuef <= 1)
 		{
-			paramValues[0] = paramValue; retVal = true;
+			paramValues[2] = paramValue; retVal = true;
 		}
 		else
-			ErrorMsg = DELAY_TYPE_ERROR_MSG;
+			ErrorMsg = DELAY_FF_ERROR_MSG;
 	}
-	else 
+	else if (paramName == "Feed Back Coef")
 	{
-		paramValuef = stof(paramValue);
-		if (paramName == "Delay Time" )
-		{	
-			if(paramValuef >= 0 && paramValuef <= MAX_DELAY_TIME && paramValuef > MIN_DELAY_TIME)
-			{	paramValues[1] = paramValue; retVal = true;}
-			else
-				ErrorMsg = DELAY_TIME_D_ERROR_MSG;
-		}
-		else if (paramName == "Feed Forward Coef")
+		if (paramValuef >= -1 && paramValuef <= 1)
 		{
-			if (paramValuef >= -1 && paramValuef <= MAX_DELAY_GAIN)
-			{
-				paramValues[2] = paramValue; retVal = true;
-			}
-			else
-				ErrorMsg = DELAY_FF_ERROR_MSG;
+			paramValues[3] = paramValue; retVal = true;
 		}
-		else if (paramName == "Feed Back Coef")
+		else
+			ErrorMsg = DELAY_FB_ERROR_MSG;
+	}
+	else if (paramName == "Follower Coef")
+	{
+		if (paramValuef >= -1 && paramValuef <= 1)
 		{
-			if (paramValuef >= -1 && paramValuef <= MAX_DELAY_GAIN)
-			{
-				paramValues[3] = paramValue; retVal = true;
-			}
-			else
-				ErrorMsg = DELAY_FB_ERROR_MSG;
+			paramValues[4] = paramValue; retVal = true;
 		}
-		else if (paramName == "Follower Coef")
-		{
-			if (paramValuef >= -1 && paramValuef <= 1)
-			{
-				paramValues[4] = paramValue; retVal = true;
-			}
-			else
-				ErrorMsg = DELAY_BL_ERROR_MSG;
-		}
+		else
+			ErrorMsg = DELAY_BL_ERROR_MSG;
 	}
 	saveValues();
 	return retVal;
@@ -74,8 +62,7 @@ bool Delay::Action(const float * in, float * out, unsigned int len)
 {
 	float aux;
 	unsigned int delayedInputIndex=0;
-	if(paramValues[0]== "Universal" )
-	for (unsigned int i = 0; i < len; i++) //Dos veces len por ser estereo.
+	for (unsigned int i = 0; i < len; i++) 
 	{
 		*out++ = bl * (*in) + (bl * fb + ff) * prevInputL[counter];
 		prevInputL[counter] = bl * ((*in++) + fb * prevInputL[counter]);
@@ -94,9 +81,9 @@ Delay::~Delay()
 
 void Delay::saveValues()
 {
-	nmbrOfTaps = (unsigned int)(stof(paramValues[1])* (float)(sampleFreq))+1;
-	ff = stof(paramValues[2]);
-	fb = stof(paramValues[3]);
-	bl = stof(paramValues[4]);
+	nmbrOfTaps = (unsigned int)(stof(paramValues[0])* (float)(sampleFreq))+1;
+	ff = stof(paramValues[1]);
+	fb = stof(paramValues[2]);
+	bl = stof(paramValues[3]);
 
 }

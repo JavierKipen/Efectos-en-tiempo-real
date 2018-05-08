@@ -4,6 +4,9 @@
 #include <vector>
 #include "portaudio.h"
 
+#define GEN_MOD(x,y) ((x)-(floor(((x)/(y)))*y))
+#define TRI_WAVE(x,y) (GEN_MOD((x),(y))/(y))
+
 using namespace std;
 
 class Effect
