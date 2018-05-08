@@ -133,6 +133,7 @@
     <ClCompile Include="Interface.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Flanger.cpp" />
+    <ClCompile Include="NotchOrder2.cpp" />
     <ClCompile Include="Phaser.cpp" />
     <ClCompile Include="PlaneReverb.cpp" />
     <ClCompile Include="Reverb.cpp" />
@@ -150,6 +151,7 @@
     <ClInclude Include="Effect.h" />
     <ClInclude Include="Fuzz.h" />
     <ClInclude Include="Interface.h" />
+    <ClInclude Include="NotchOrder2.h" />
     <ClInclude Include="pa_asio.h" />
     <ClInclude Include="pa_jack.h" />
     <ClInclude Include="pa_linux_alsa.h" />

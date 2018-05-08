@@ -16,18 +16,38 @@ Phaser::Phaser(unsigned int sampleFreq)
 	paramValues = PHASER_DEFAULT_PARAM_VALUES;
 	filterMinFrecs[0] = 200;
 	filterMinFrecs[1] = 400;
-	filterMinFrecs[2] = 600;
-	filterMinFrecs[3] = 800;
-	filterMinFrecs[4] = 1000;
-	filterMinFrecs[5] = 1200;
+	filterMinFrecs[2] = 800;
+	filterMinFrecs[3] = 1600;
+	filterMinFrecs[4] = 3200;
 	saveValues();
+	NotchFilter = vector<NotchOrder2>(5);
+	for (auto& filter : NotchFilter)
+		filter.setSampleFreq(sampleFreq);
 }
 
 bool Phaser::Action(const float * in, float * out, unsigned int len)
 {
-	varBRFilter.filter((float *)in, out, len);
-	/*for (unsigned int i = 0; i < 2 * len; i++)
-		out[i] = in[i] * (1.0f - (depth / 2.0f)) + out[i] * (depth / 2.0f);*/
+	//fo = 1080;
+	sweepWidth = 200;
+	float faux, aux[2];
+	for (unsigned int i = 0; i <  len; i++)
+	{
+		faux = filterMinFrecs[0] + sweepWidth * sin(2 * 3.14159265*(float)sampleCount*lfoFreq / sampleFreq);
+		NotchFilter[0].setParameters(faux, 0.99);
+		NotchFilter[0].filter((float *)in, aux, 1);
+		for (int i = 1; i < 5; i++)
+		{
+			faux = filterMinFrecs[i] + sweepWidth * sin(2 * 3.14159265*(float)sampleCount*lfoFreq / sampleFreq);
+			NotchFilter[i].setParameters(faux, 0.99);
+			NotchFilter[i].filter(aux, aux, 1);
+		}
+		/*faux = fo + sweepWidth * sin(2 * 3.14159265*(float)sampleCount*lfoFreq / sampleFreq);
+		NotchFilter.setParameters(faux, 0.99);
+		NotchFilter.filter((float *)in, aux, 1);*/
+		*out++ = *in++ - aux[0];
+		*out++ = *in++ - aux[1];
+		sampleCount++;
+	}
 	return true;
 }
 

@@ -1,6 +1,7 @@
 #pragma once
 #include "Effect.h"
 #include "VarBRFilter.h"
+#include "NotchOrder2.h"
 
 #define PHASER_DEFAULT_N_FILTERS "5"
 #define PHASER_DEFAULT_GB "0.5"
@@ -22,10 +23,11 @@ public:
 	~Phaser();
 private:
 	void saveValues();
+	vector<NotchOrder2> NotchFilter;
 	VarBRFilter varBRFilter;
 	void updateFilters();
-	unsigned int numberOfFilters, prevNmbrOfFilters;
-	float gb, Q, aux[MAX_INPUT_LEN],depth, sweepWidth,lfoFreq;
+	unsigned int numberOfFilters, prevNmbrOfFilters, sampleCount;
+	float gb, Q, aux[MAX_INPUT_LEN],depth, sweepWidth,lfoFreq, fo;
 	float filterMinFrecs[MAX_NMBR_OF_FILTERS];
 };
 

@@ -81,6 +81,9 @@
     <ClCompile Include="Phaser.cpp">
       <Filter>Source Files\Efectos</Filter>
     </ClCompile>
+    <ClCompile Include="NotchOrder2.cpp">
+      <Filter>Source Files\Para efectos</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pa_asio.h">
@@ -160,6 +163,9 @@
     </ClInclude>
     <ClInclude Include="Phaser.h">
       <Filter>Header Files\Efectos</Filter>
+    </ClInclude>
+    <ClInclude Include="NotchOrder2.h">
+      <Filter>Header Files\Para efectos</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
