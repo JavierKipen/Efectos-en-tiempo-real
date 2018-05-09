@@ -97,7 +97,7 @@ void Chorus::calculateEcho()
 	if (paramValues[CHORUS_LFO_TYPE_INDEX] == "Sine")
 		sampleIndex = sin(2 * 3.14159265 * lfoFreq * (float)sampleCount / sampleFreq)  * (float)maxDevOfTaps + maxDevOfTaps; //Calculo la desviación que tendrá para el sample dado
 	else if (paramValues[CHORUS_LFO_TYPE_INDEX] == "Triang")
-		sampleIndex = TRI_WAVE((float)sampleCount, lfoFreq *(float)sampleFreq)* 2 * (float)maxDevOfTaps;
+		sampleIndex = TRI_WAVE((float)sampleCount, (float)sampleFreq/lfoFreq)* 2 * (float)maxDevOfTaps;
 	sampleIndex = counter + sampleIndex;
 	if(sampleIndex > maxTaps)
 		sampleIndex = sampleIndex - maxTaps;
