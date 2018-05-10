@@ -1,6 +1,11 @@
 #include "AudioEffects.h"
 
 
+#include <iostream>
+#include <chrono>
+
+using namespace std;
+using namespace std::chrono;
 
 AudioEffects::AudioEffects()
 {
@@ -149,7 +154,9 @@ int audioEffectCallback(const void * inputBuffer, void * outputBuffer, unsigned 
 	(void)statusFlags;
 	(void)userData;
 	AudioEffects *audioEffects = (AudioEffects *)userData;
+	high_resolution_clock::time_point t1 = high_resolution_clock::now();
 	audioEffects->Action(in, out, framesPerBuffer);
-
+	high_resolution_clock::time_point t2 = high_resolution_clock::now();
+	auto duration = duration_cast<microseconds>(t2 - t1).count();
 	return paContinue;
 }

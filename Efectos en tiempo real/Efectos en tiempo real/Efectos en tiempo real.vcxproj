@@ -127,6 +127,7 @@
     <ClCompile Include="Chorus.cpp" />
     <ClCompile Include="CombReverberator.cpp" />
     <ClCompile Include="CombReverbLP.cpp" />
+    <ClCompile Include="CompleteReverb.cpp" />
     <ClCompile Include="Delay.cpp" />
     <ClCompile Include="Effect.cpp" />
     <ClCompile Include="Fuzz.cpp" />
@@ -147,6 +148,7 @@
     <ClInclude Include="Chorus.h" />
     <ClInclude Include="CombReverberator.h" />
     <ClInclude Include="CombReverbLP.h" />
+    <ClInclude Include="CompleteReverb.h" />
     <ClInclude Include="Delay.h" />
     <ClInclude Include="Effect.h" />
     <ClInclude Include="Fuzz.h" />
