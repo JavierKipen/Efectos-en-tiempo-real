@@ -12,6 +12,8 @@
 #define MAX_AUDIBLE_FREQ 20000.0f
 #define MIN_AUDIBLE_FREQ 20.0f
 
+#define MAX_INPUT_LEN 2048
+
 using namespace std;
 
 class Effect

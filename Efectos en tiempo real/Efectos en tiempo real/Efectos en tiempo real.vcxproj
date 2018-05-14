@@ -89,7 +89,7 @@
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>portaudio_x64.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>portaudio_x64.lib;libsndfile-1.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -140,6 +140,7 @@
     <ClCompile Include="Reverb.cpp" />
     <ClCompile Include="VarBRFilter.cpp" />
     <ClCompile Include="Vibrato.cpp" />
+    <ClCompile Include="WavEffectAdder.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AudioEffects.h" />
@@ -168,10 +169,12 @@
     <ClInclude Include="portaudio.h" />
     <ClInclude Include="Reverb.h" />
     <ClInclude Include="Flanger.h" />
+    <ClInclude Include="sndfile.h" />
+    <ClInclude Include="sndfile.hh" />
     <ClInclude Include="VarBRFilter.h" />
     <ClInclude Include="Vibrato.h" />
+    <ClInclude Include="WavEffectAdder.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
-  <ImportGroup Label="ExtensionTargets">
-  </ImportGroup>
+  <ImportGroup Label="ExtensionTargets" />
 </Project>

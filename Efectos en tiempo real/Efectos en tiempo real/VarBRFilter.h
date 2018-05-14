@@ -1,8 +1,9 @@
 #pragma once
 #include "BandRejectIIROrder2.h"
+#include "Effect.h"
 #include <cstring>
 
-#define MAX_INPUT_LEN 1024
+
 
 #define MAX_NMBR_OF_FILTERS 32
 

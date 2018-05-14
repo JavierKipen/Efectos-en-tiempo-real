@@ -33,9 +33,6 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Effect.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="AudioEffects.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -87,6 +84,12 @@
     <ClCompile Include="Distortion.cpp">
       <Filter>Source Files\Efectos</Filter>
     </ClCompile>
+    <ClCompile Include="Effect.cpp">
+      <Filter>Source Files\Efectos</Filter>
+    </ClCompile>
+    <ClCompile Include="WavEffectAdder.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pa_asio.h">
@@ -118,9 +121,6 @@
     </ClInclude>
     <ClInclude Include="portaudio.h">
       <Filter>Header Files\Portaudio Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Effect.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="AudioEffects.h">
       <Filter>Header Files</Filter>
@@ -172,6 +172,18 @@
     </ClInclude>
     <ClInclude Include="Distortion.h">
       <Filter>Header Files\Efectos</Filter>
+    </ClInclude>
+    <ClInclude Include="Effect.h">
+      <Filter>Header Files\Efectos</Filter>
+    </ClInclude>
+    <ClInclude Include="WavEffectAdder.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sndfile.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sndfile.hh">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
