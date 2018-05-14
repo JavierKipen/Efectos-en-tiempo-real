@@ -42,9 +42,6 @@
     <ClCompile Include="Interface.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Fuzz.cpp">
-      <Filter>Source Files\Efectos</Filter>
-    </ClCompile>
     <ClCompile Include="Delay.cpp">
       <Filter>Source Files\Efectos</Filter>
     </ClCompile>
@@ -85,6 +82,9 @@
       <Filter>Source Files\Para efectos</Filter>
     </ClCompile>
     <ClCompile Include="CompleteReverb.cpp">
+      <Filter>Source Files\Para efectos</Filter>
+    </ClCompile>
+    <ClCompile Include="Distortion.cpp">
       <Filter>Source Files\Efectos</Filter>
     </ClCompile>
   </ItemGroup>
@@ -128,9 +128,6 @@
     <ClInclude Include="Interface.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Fuzz.h">
-      <Filter>Header Files\Efectos</Filter>
-    </ClInclude>
     <ClInclude Include="Delay.h">
       <Filter>Header Files\Efectos</Filter>
     </ClInclude>
@@ -171,6 +168,9 @@
       <Filter>Header Files\Para efectos</Filter>
     </ClInclude>
     <ClInclude Include="CompleteReverb.h">
+      <Filter>Header Files\Para efectos</Filter>
+    </ClInclude>
+    <ClInclude Include="Distortion.h">
       <Filter>Header Files\Efectos</Filter>
     </ClInclude>
   </ItemGroup>

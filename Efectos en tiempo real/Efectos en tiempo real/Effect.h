@@ -7,6 +7,7 @@
 #define GEN_MOD(x,y) ((x)-(floor(((x)/(y)))*y)) //La función módulo más general
 #define RAMP_WAVE(x,y) (GEN_MOD((x),(y))/(y)) //RAMP
 #define TRI_WAVE(x,y) (abs(2*RAMP_WAVE(x,y)-1))
+#define SIGN(x) ((x > 0) ? 1.0f : ((x < 0) ? -1.0f : 0))
 
 #define MAX_AUDIBLE_FREQ 20000.0f
 #define MIN_AUDIBLE_FREQ 20.0f

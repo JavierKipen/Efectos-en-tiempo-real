@@ -64,8 +64,8 @@ void AudioEffects::pickNewEffect(string newEffect)
 	Pa_StopStream(stream);
 	while ((err = Pa_IsStreamActive(stream)) != 0);
 	delete currentEffect;
-	if (newEffect == "Fuzz")		//Se escoge el nuevo efecto
-		currentEffect = new Fuzz(DEFAULT_SAMPLE_RATE);
+	if (newEffect == "Distortion")		//Se escoge el nuevo efecto
+		currentEffect = new Distortion(DEFAULT_SAMPLE_RATE);
 	else if (newEffect == "Delay")
 		currentEffect = new Delay(DEFAULT_SAMPLE_RATE);
 	else if (newEffect == "Reverb")

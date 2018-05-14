@@ -1,6 +1,6 @@
 #pragma once
 #include "Effect.h"
-#include "Fuzz.h"
+#include "Distortion.h"
 #include "Delay.h"
 #include "Reverb.h"
 #include "Flanger.h"
@@ -8,7 +8,7 @@
 #include "Vibrato.h"
 #include "Phaser.h"
 
-#define LIST_OF_EFFECTS {"Fuzz", "Delay", "Reverb", "Flanger", "Chorus","Vibrato", "Phaser"}
+#define LIST_OF_EFFECTS {"Distortion", "Delay", "Reverb", "Flanger", "Chorus","Vibrato", "Phaser"}
 
 #define DEFAULT_SAMPLE_RATE         (44100)
 #define PA_SAMPLE_TYPE      paFloat32
