@@ -102,7 +102,5 @@ bool WavEffectAdder::chooseEffect(string effect)
 
 	if (currEffect != NULL)
 		retVal = true;
-	else
-		cout << "The efect chosen was wrong, it muss be one of this: " << endl;
 	return retVal;
 }
