@@ -2,24 +2,25 @@
 
 
 
-Robot::Robot(unsigned int sampleFreq)
+Robot::Robot(unsigned int sampleFreq,unsigned int N)
 {
 	this->sampleFreq = sampleFreq;
+	this->N = N;
 	windowed = true;
-	inL = vector<complex<float>>(ROBOT_DEFAULT_LEN);
-	inR = vector<complex<float>>(ROBOT_DEFAULT_LEN);
-	prevInL = vector<complex<float>>(ROBOT_DEFAULT_LEN);
-	prevInR = vector<complex<float>>(ROBOT_DEFAULT_LEN);
-	OutL = vector<complex<float>>(ROBOT_DEFAULT_LEN);
-	OutR = vector<complex<float>>(ROBOT_DEFAULT_LEN);
-	block1L = vector<complex<float>>(ROBOT_DEFAULT_LEN);
-	block2L = vector<complex<float>>(ROBOT_DEFAULT_LEN );
-	block1R = vector<complex<float>>(ROBOT_DEFAULT_LEN);
-	block2R = vector<complex<float>>(ROBOT_DEFAULT_LEN);
-	HannWindow = vector<complex<float>>(ROBOT_DEFAULT_LEN);
-	for (unsigned int i = 0; i < ROBOT_DEFAULT_LEN; i++)
+	inL = vector<complex<float>>(N);
+	inR = vector<complex<float>>(N);
+	prevInL = vector<complex<float>>(N);
+	prevInR = vector<complex<float>>(N);
+	OutL = vector<complex<float>>(N);
+	OutR = vector<complex<float>>(N);
+	block1L = vector<complex<float>>(N);
+	block2L = vector<complex<float>>(N );
+	block1R = vector<complex<float>>(N);
+	block2R = vector<complex<float>>(N);
+	HannWindow = vector<complex<float>>(N);
+	for (unsigned int i = 0; i < N; i++)
 	{
-		HannWindow[i] = 0.5*(1 - cos(2 * 3.14159265*(float)i / (float)(ROBOT_DEFAULT_LEN - 1)));
+		HannWindow[i] = 0.5*(1 - cos(2 * 3.14159265*(float)i / (float)(N - 1)));
 	}
 }
 
@@ -53,12 +54,12 @@ bool Robot::Action(const float * in, float * out, unsigned int len)
 		{
 			block2L[i] = *in++;
 			inL[i] = block2L[i];
-			if (i < ROBOT_DEFAULT_LEN / 2)
-				block1L[i + (ROBOT_DEFAULT_LEN / 2)] = block2L[i];
+			if (i < N / 2)
+				block1L[i + (N / 2)] = block2L[i];
 			block2R[i] = *in++;
 			inR[i] = block2R[i];
-			if (i < ROBOT_DEFAULT_LEN / 2)
-				block1R[i + (ROBOT_DEFAULT_LEN / 2)] = block2R[i];
+			if (i < N / 2)
+				block1R[i + (N / 2)] = block2R[i];
 		}
 		windowBlocks();
 		robotizeBlocks();
@@ -86,7 +87,7 @@ Robot::~Robot()
 
 void Robot::windowBlocks()
 {
-	for (unsigned int i = 0; i < ROBOT_DEFAULT_LEN; i++)
+	for (unsigned int i = 0; i < N; i++)
 	{
 		block1L[i] = block1L[i] * HannWindow[i];
 		block2L[i] = block2L[i] * HannWindow[i];
@@ -97,7 +98,7 @@ void Robot::windowBlocks()
 
 void Robot::deWindowBlocks()
 {
-	for (unsigned int i = 0; i < ROBOT_DEFAULT_LEN; i++)
+	for (unsigned int i = 0; i < N; i++)
 	{
 		block1L[i] = block1L[i] / HannWindow[i];
 		block2L[i] = block2L[i] / HannWindow[i];
@@ -115,31 +116,31 @@ void Robot::robotizeBlocks()
 }
 void Robot::savePreviousData()
 {
-	for (unsigned int i = 0; i < ROBOT_DEFAULT_LEN/2; i++)
+	for (unsigned int i = 0; i < N/2; i++)
 	{
-		OutL[i] =  0.5 * block2L[i + (ROBOT_DEFAULT_LEN / 2)].real();
-		OutR[i] =  0.5 * block2R[i + (ROBOT_DEFAULT_LEN / 2)].real();
-		block1L[i] = inL[i + (ROBOT_DEFAULT_LEN / 2)];
-		block1R[i] = inR[i + (ROBOT_DEFAULT_LEN / 2)];
+		OutL[i] =  0.5 * block2L[i + (N / 2)].real();
+		OutR[i] =  0.5 * block2R[i + (N / 2)].real();
+		block1L[i] = inL[i + (N / 2)];
+		block1R[i] = inR[i + (N / 2)];
 	}
 }
 void Robot::robotize(complex<float> *a)
 {
-	fft(a, a, ROBOT_DEFAULT_LEN);
-	for (unsigned int c=0; c< ROBOT_DEFAULT_LEN;c++)
+	fft(a, a, N);
+	for (unsigned int c=0; c< N;c++)
 		a[c] = abs(a[c]);
-	ifft(a, a, ROBOT_DEFAULT_LEN);
+	ifft(a, a, N);
 }
 void Robot::obtainOuputs()
 {
-	for (unsigned int i = 0; i < ROBOT_DEFAULT_LEN / 2; i++)
+	for (unsigned int i = 0; i < N / 2; i++)
 	{
 		OutL[i] += 0.5 * block1L[i].real();
 		OutR[i] += 0.5 * block1R[i].real();
 	}
-	for (unsigned int i = ROBOT_DEFAULT_LEN / 2; i < ROBOT_DEFAULT_LEN ; i++)
+	for (unsigned int i = N / 2; i < N ; i++)
 	{
-		OutL[i] = 0.5 * block1L[i].real() + 0.5 * block2L[i- (ROBOT_DEFAULT_LEN / 2)].real();
-		OutR[i] = 0.5 * block1R[i].real() + 0.5 * block2R[i-(ROBOT_DEFAULT_LEN / 2)].real();
+		OutL[i] = 0.5 * block1L[i].real() + 0.5 * block2L[i- (N / 2)].real();
+		OutR[i] = 0.5 * block1R[i].real() + 0.5 * block2R[i-(N / 2)].real();
 	}
 }

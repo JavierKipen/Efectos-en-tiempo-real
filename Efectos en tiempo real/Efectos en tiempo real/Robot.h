@@ -7,11 +7,12 @@ class Robot :
 	public Effect
 {
 public:
-	Robot(unsigned int sampleFreq);
+	Robot(unsigned int sampleFreq,unsigned int N);
 	bool Action(const float * in, float * out, unsigned int len);
 	bool setParam(string paramName, string paramValue);
 	~Robot();
 private:
+	unsigned int N;
 	void windowBlocks();
 	void deWindowBlocks();
 	void robotizeBlocks();

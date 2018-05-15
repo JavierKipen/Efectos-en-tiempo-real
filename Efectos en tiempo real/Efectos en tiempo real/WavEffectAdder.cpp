@@ -100,7 +100,7 @@ bool WavEffectAdder::chooseEffect(string effect)
 	else if (effect == "Phaser")
 		currEffect = new Phaser(DEFAULT_SAMPLE_RATE);
 	else if (effect == "Robot")
-		currEffect = new Robot(DEFAULT_SAMPLE_RATE);
+		currEffect = new Robot(DEFAULT_SAMPLE_RATE,MAX_INPUT_LEN/2);
 
 	if (currEffect != NULL)
 		retVal = true;

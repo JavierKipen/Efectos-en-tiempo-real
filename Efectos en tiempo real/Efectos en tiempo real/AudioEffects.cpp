@@ -80,16 +80,13 @@ void AudioEffects::pickNewEffect(string newEffect)
 	else if (newEffect == "Phaser")
 		currentEffect = new Phaser(DEFAULT_SAMPLE_RATE);
 	else if (newEffect == "Robot")
-		currentEffect = new Robot(DEFAULT_SAMPLE_RATE);
+		currentEffect = new Robot(DEFAULT_SAMPLE_RATE, ROBOT_DEFAULT_LEN);
 	//Pa_OpenStream(&stream, &inputParameters, &outputParameters, sampleRate, framesPerBuffer,0,audioEffectCallback,this);
-	//if((newEffect != "Robot" && !prevEffectWasRobot) ||(newEffect == "Robot" && prevEffectWasRobot))
+	if((newEffect != "Robot" && !prevEffectWasRobot) ||(newEffect == "Robot" && prevEffectWasRobot))
 		Pa_StartStream(stream);//Se vuelve a usar el stream
-	/*else 
+	else 
 	{
 		Pa_CloseStream(stream);
-		while ((err = Pa_IsStreamActive(stream)) != 0);
-		Pa_Terminate();
-		err = Pa_Initialize();
 		if (err == paNoError)
 		{
 			if (newEffect == "Robot" && !prevEffectWasRobot)
@@ -103,8 +100,8 @@ void AudioEffects::pickNewEffect(string newEffect)
 				prevEffectWasRobot = false;
 			}
 		}
-		startPlaying();
-	}*/
+		Pa_StartStream(stream);
+	}
 }
 
 string AudioEffects::popErrorMsg()

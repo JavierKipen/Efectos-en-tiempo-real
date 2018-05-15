@@ -13,7 +13,7 @@
 
 #define DEFAULT_SAMPLE_RATE         (44100)
 #define PA_SAMPLE_TYPE      paFloat32
-#define DEFAULT_FRAMES_PER_BUFFER   (512)
+#define DEFAULT_FRAMES_PER_BUFFER   (64)
 
 class AudioEffects
 {
