@@ -84,6 +84,9 @@
     <ClCompile Include="NotchOrder2.cpp">
       <Filter>Source Files\Para efectos</Filter>
     </ClCompile>
+    <ClCompile Include="effect3D.cpp">
+      <Filter>Source Files\Efectos</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pa_asio.h">
@@ -166,6 +169,9 @@
     </ClInclude>
     <ClInclude Include="NotchOrder2.h">
       <Filter>Header Files\Para efectos</Filter>
+    </ClInclude>
+    <ClInclude Include="effect3D.h">
+      <Filter>Header Files\Efectos</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

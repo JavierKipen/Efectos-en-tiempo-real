@@ -129,6 +129,7 @@
     <ClCompile Include="CombReverbLP.cpp" />
     <ClCompile Include="Delay.cpp" />
     <ClCompile Include="Effect.cpp" />
+    <ClCompile Include="effect3D.cpp" />
     <ClCompile Include="Fuzz.cpp" />
     <ClCompile Include="Interface.cpp" />
     <ClCompile Include="main.cpp" />
@@ -149,6 +150,7 @@
     <ClInclude Include="CombReverbLP.h" />
     <ClInclude Include="Delay.h" />
     <ClInclude Include="Effect.h" />
+    <ClInclude Include="effect3D.h" />
     <ClInclude Include="Fuzz.h" />
     <ClInclude Include="Interface.h" />
     <ClInclude Include="NotchOrder2.h" />

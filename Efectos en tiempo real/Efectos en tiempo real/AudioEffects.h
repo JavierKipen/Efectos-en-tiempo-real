@@ -7,8 +7,9 @@
 #include "Chorus.h"
 #include "Vibrato.h"
 #include "Phaser.h"
+#include "effect3D.h"
 
-#define LIST_OF_EFFECTS {"Fuzz", "Delay", "Reverb", "Flanger", "Chorus","Vibrato", "Phaser"}
+#define LIST_OF_EFFECTS {"Fuzz", "Delay", "Reverb", "Flanger", "Chorus","Vibrato", "Phaser", "3D Effect"}
 
 #define DEFAULT_SAMPLE_RATE         (44100)
 #define PA_SAMPLE_TYPE      paFloat32
