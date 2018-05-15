@@ -131,6 +131,7 @@
     <ClCompile Include="Delay.cpp" />
     <ClCompile Include="Distortion.cpp" />
     <ClCompile Include="Effect.cpp" />
+    <ClCompile Include="FFT.cpp" />
     <ClCompile Include="Interface.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Flanger.cpp" />
@@ -138,6 +139,7 @@
     <ClCompile Include="Phaser.cpp" />
     <ClCompile Include="PlaneReverb.cpp" />
     <ClCompile Include="Reverb.cpp" />
+    <ClCompile Include="Robot.cpp" />
     <ClCompile Include="VarBRFilter.cpp" />
     <ClCompile Include="Vibrato.cpp" />
     <ClCompile Include="WavEffectAdder.cpp" />
@@ -153,6 +155,7 @@
     <ClInclude Include="Delay.h" />
     <ClInclude Include="Distortion.h" />
     <ClInclude Include="Effect.h" />
+    <ClInclude Include="FFT.h" />
     <ClInclude Include="Interface.h" />
     <ClInclude Include="NotchOrder2.h" />
     <ClInclude Include="pa_asio.h" />
@@ -169,6 +172,7 @@
     <ClInclude Include="portaudio.h" />
     <ClInclude Include="Reverb.h" />
     <ClInclude Include="Flanger.h" />
+    <ClInclude Include="Robot.h" />
     <ClInclude Include="sndfile.h" />
     <ClInclude Include="sndfile.hh" />
     <ClInclude Include="VarBRFilter.h" />

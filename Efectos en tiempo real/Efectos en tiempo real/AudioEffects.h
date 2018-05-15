@@ -7,12 +7,13 @@
 #include "Chorus.h"
 #include "Vibrato.h"
 #include "Phaser.h"
+#include "Robot.h"
 
-#define LIST_OF_EFFECTS {"Distortion", "Delay", "Reverb", "Flanger", "Chorus","Vibrato", "Phaser"}
+#define LIST_OF_EFFECTS {"Distortion", "Delay", "Reverb", "Flanger", "Chorus","Vibrato", "Phaser", "Robot"}
 
 #define DEFAULT_SAMPLE_RATE         (44100)
 #define PA_SAMPLE_TYPE      paFloat32
-#define DEFAULT_FRAMES_PER_BUFFER   (64)
+#define DEFAULT_FRAMES_PER_BUFFER   (512)
 
 class AudioEffects
 {
@@ -31,7 +32,7 @@ public:
 	~AudioEffects();
 private:
 	void initPortAudio(unsigned int sampleRate, unsigned int framesPerBuffer);
-	bool initOk;
+	bool initOk,prevEffectWasRobot;
 	Effect * currentEffect;
 	vector<string> allEffects;
 	PaStreamParameters inputParameters, outputParameters;

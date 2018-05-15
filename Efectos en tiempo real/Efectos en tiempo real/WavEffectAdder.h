@@ -8,6 +8,7 @@
 #include "Chorus.h"
 #include "Vibrato.h"
 #include "Phaser.h"
+#include "Robot.h"
 #include <iostream>
 #include <chrono>
 #include <thread>

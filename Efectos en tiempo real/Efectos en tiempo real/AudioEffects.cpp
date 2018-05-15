@@ -12,6 +12,7 @@ AudioEffects::AudioEffects()
 	currentEffect = new Delay(DEFAULT_SAMPLE_RATE);
 	allEffects = LIST_OF_EFFECTS;
 	initOk = false;
+	prevEffectWasRobot = false;
 	err = Pa_Initialize();
 	if (err == paNoError)
 		initPortAudio(DEFAULT_SAMPLE_RATE,DEFAULT_FRAMES_PER_BUFFER);
@@ -78,8 +79,32 @@ void AudioEffects::pickNewEffect(string newEffect)
 		currentEffect = new Vibrato(DEFAULT_SAMPLE_RATE);
 	else if (newEffect == "Phaser")
 		currentEffect = new Phaser(DEFAULT_SAMPLE_RATE);
+	else if (newEffect == "Robot")
+		currentEffect = new Robot(DEFAULT_SAMPLE_RATE);
 	//Pa_OpenStream(&stream, &inputParameters, &outputParameters, sampleRate, framesPerBuffer,0,audioEffectCallback,this);
-	Pa_StartStream(stream);//Se vuelve a usar el stream
+	//if((newEffect != "Robot" && !prevEffectWasRobot) ||(newEffect == "Robot" && prevEffectWasRobot))
+		Pa_StartStream(stream);//Se vuelve a usar el stream
+	/*else 
+	{
+		Pa_CloseStream(stream);
+		while ((err = Pa_IsStreamActive(stream)) != 0);
+		Pa_Terminate();
+		err = Pa_Initialize();
+		if (err == paNoError)
+		{
+			if (newEffect == "Robot" && !prevEffectWasRobot)
+			{
+				initPortAudio(DEFAULT_SAMPLE_RATE, ROBOT_DEFAULT_LEN);
+				prevEffectWasRobot = true;
+			}
+			else if (newEffect != "Robot" && prevEffectWasRobot)
+			{
+				initPortAudio(DEFAULT_SAMPLE_RATE, DEFAULT_FRAMES_PER_BUFFER);
+				prevEffectWasRobot = false;
+			}
+		}
+		startPlaying();
+	}*/
 }
 
 string AudioEffects::popErrorMsg()

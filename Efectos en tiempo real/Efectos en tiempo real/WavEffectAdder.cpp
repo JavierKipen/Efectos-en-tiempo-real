@@ -99,6 +99,8 @@ bool WavEffectAdder::chooseEffect(string effect)
 		currEffect = new Vibrato(DEFAULT_SAMPLE_RATE);
 	else if (effect == "Phaser")
 		currEffect = new Phaser(DEFAULT_SAMPLE_RATE);
+	else if (effect == "Robot")
+		currEffect = new Robot(DEFAULT_SAMPLE_RATE);
 
 	if (currEffect != NULL)
 		retVal = true;

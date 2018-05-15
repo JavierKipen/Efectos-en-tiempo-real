@@ -90,6 +90,12 @@
     <ClCompile Include="WavEffectAdder.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="FFT.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Robot.cpp">
+      <Filter>Source Files\Efectos</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pa_asio.h">
@@ -184,6 +190,12 @@
     </ClInclude>
     <ClInclude Include="sndfile.hh">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FFT.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Robot.h">
+      <Filter>Header Files\Efectos</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
