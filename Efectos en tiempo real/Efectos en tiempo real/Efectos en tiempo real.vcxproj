@@ -89,7 +89,7 @@
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>portaudio_x64.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>portaudio_x64.lib;libsndfile-1.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -127,8 +127,11 @@
     <ClCompile Include="Chorus.cpp" />
     <ClCompile Include="CombReverberator.cpp" />
     <ClCompile Include="CombReverbLP.cpp" />
+    <ClCompile Include="CompleteReverb.cpp" />
     <ClCompile Include="Delay.cpp" />
+    <ClCompile Include="Distortion.cpp" />
     <ClCompile Include="Effect.cpp" />
+    <ClCompile Include="FFT.cpp" />
     <ClCompile Include="effect3D.cpp" />
     <ClCompile Include="Fuzz.cpp" />
     <ClCompile Include="Interface.cpp" />
@@ -138,8 +141,10 @@
     <ClCompile Include="Phaser.cpp" />
     <ClCompile Include="PlaneReverb.cpp" />
     <ClCompile Include="Reverb.cpp" />
+    <ClCompile Include="Robot.cpp" />
     <ClCompile Include="VarBRFilter.cpp" />
     <ClCompile Include="Vibrato.cpp" />
+    <ClCompile Include="WavEffectAdder.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AudioEffects.h" />
@@ -148,8 +153,11 @@
     <ClInclude Include="Chorus.h" />
     <ClInclude Include="CombReverberator.h" />
     <ClInclude Include="CombReverbLP.h" />
+    <ClInclude Include="CompleteReverb.h" />
     <ClInclude Include="Delay.h" />
+    <ClInclude Include="Distortion.h" />
     <ClInclude Include="Effect.h" />
+    <ClInclude Include="FFT.h" />
     <ClInclude Include="effect3D.h" />
     <ClInclude Include="Fuzz.h" />
     <ClInclude Include="Interface.h" />
@@ -168,10 +176,13 @@
     <ClInclude Include="portaudio.h" />
     <ClInclude Include="Reverb.h" />
     <ClInclude Include="Flanger.h" />
+    <ClInclude Include="Robot.h" />
+    <ClInclude Include="sndfile.h" />
+    <ClInclude Include="sndfile.hh" />
     <ClInclude Include="VarBRFilter.h" />
     <ClInclude Include="Vibrato.h" />
+    <ClInclude Include="WavEffectAdder.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
-  <ImportGroup Label="ExtensionTargets">
-  </ImportGroup>
+  <ImportGroup Label="ExtensionTargets" />
 </Project>

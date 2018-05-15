@@ -3,7 +3,20 @@
 
 
 
+CombReverberator::CombReverberator()
+{
+}
+
 CombReverberator::CombReverberator(float g, unsigned int Taps)
+{
+	this->g = g;
+	this->Taps = Taps;
+	memoryL.resize(Taps, 0);
+	memoryR.resize(Taps, 0);
+	counter = 0;
+}
+
+void CombReverberator::setParams(float g, unsigned int Taps)
 {
 	this->g = g;
 	this->Taps = Taps;

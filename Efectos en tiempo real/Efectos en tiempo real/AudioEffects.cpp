@@ -1,12 +1,19 @@
 #include "AudioEffects.h"
 
 
+#include <iostream>
+#include <chrono>
+
+using namespace std;
+using namespace std::chrono;
 
 AudioEffects::AudioEffects()
 {
 	currentEffect = new Delay(DEFAULT_SAMPLE_RATE);
+	warnBoutNumeric = false;
 	allEffects = LIST_OF_EFFECTS;
 	initOk = false;
+	prevEffectWasRobot = false;
 	err = Pa_Initialize();
 	if (err == paNoError)
 		initPortAudio(DEFAULT_SAMPLE_RATE,DEFAULT_FRAMES_PER_BUFFER);
@@ -59,8 +66,8 @@ void AudioEffects::pickNewEffect(string newEffect)
 	Pa_StopStream(stream);
 	while ((err = Pa_IsStreamActive(stream)) != 0);
 	delete currentEffect;
-	if (newEffect == "Fuzz")		//Se escoge el nuevo efecto
-		currentEffect = new Fuzz(DEFAULT_SAMPLE_RATE);
+	if (newEffect == "Distortion")		//Se escoge el nuevo efecto
+		currentEffect = new Distortion(DEFAULT_SAMPLE_RATE);
 	else if (newEffect == "Delay")
 		currentEffect = new Delay(DEFAULT_SAMPLE_RATE);
 	else if (newEffect == "Reverb")
@@ -73,10 +80,31 @@ void AudioEffects::pickNewEffect(string newEffect)
 		currentEffect = new Vibrato(DEFAULT_SAMPLE_RATE);
 	else if (newEffect == "Phaser")
 		currentEffect = new Phaser(DEFAULT_SAMPLE_RATE);
+	else if (newEffect == "Robot")
+		currentEffect = new Robot(DEFAULT_SAMPLE_RATE, ROBOT_DEFAULT_LEN);
 	else if (newEffect == "3D Effect")
 		currentEffect = new effect3D(DEFAULT_SAMPLE_RATE);
 	//Pa_OpenStream(&stream, &inputParameters, &outputParameters, sampleRate, framesPerBuffer,0,audioEffectCallback,this);
-	Pa_StartStream(stream);//Se vuelve a usar el stream
+	if((newEffect != "Robot" && !prevEffectWasRobot) ||(newEffect == "Robot" && prevEffectWasRobot))
+		Pa_StartStream(stream);//Se vuelve a usar el stream
+	else 
+	{
+		Pa_CloseStream(stream);
+		if (err == paNoError)
+		{
+			if (newEffect == "Robot" && !prevEffectWasRobot)
+			{
+				initPortAudio(DEFAULT_SAMPLE_RATE, ROBOT_DEFAULT_LEN);
+				prevEffectWasRobot = true;
+			}
+			else if (newEffect != "Robot" && prevEffectWasRobot)
+			{
+				initPortAudio(DEFAULT_SAMPLE_RATE, DEFAULT_FRAMES_PER_BUFFER);
+				prevEffectWasRobot = false;
+			}
+		}
+		Pa_StartStream(stream);
+	}
 }
 
 string AudioEffects::popErrorMsg()
@@ -104,8 +132,14 @@ bool AudioEffects::setParam(string paramName, string paramValue)
 	bool retVal=false;
 	Pa_StopStream(stream);
 	while ((err = Pa_IsStreamActive(stream)) != 0);
-	if (paramValue.size()!=0) //Evita valores que nunca van a tomar parámetros.
-		retVal = currentEffect->setParam(paramName, paramValue);
+	try {
+		if (paramValue.size() != 0) //Evita valores que nunca van a tomar parámetros.
+			retVal = currentEffect->setParam(paramName, paramValue);
+	}
+	catch (std::invalid_argument a)
+	{
+		warnBoutNumeric = true;
+	}
 	Pa_StartStream(stream);
 	return retVal;
 }
@@ -126,7 +160,12 @@ bool AudioEffects::Action(const float * in, float * out, unsigned int len)
 	}
 	return true;*/
 }
-
+bool AudioEffects::popNumericalError()
+{
+	bool aux = warnBoutNumeric;
+	warnBoutNumeric = false;
+	return aux;
+}
 vector<string> AudioEffects::getListOfEffects()
 {
 	return allEffects;
@@ -151,7 +190,9 @@ int audioEffectCallback(const void * inputBuffer, void * outputBuffer, unsigned 
 	(void)statusFlags;
 	(void)userData;
 	AudioEffects *audioEffects = (AudioEffects *)userData;
+	high_resolution_clock::time_point t1 = high_resolution_clock::now();
 	audioEffects->Action(in, out, framesPerBuffer);
-
+	high_resolution_clock::time_point t2 = high_resolution_clock::now();
+	auto duration = duration_cast<microseconds>(t2 - t1).count();
 	return paContinue;
 }

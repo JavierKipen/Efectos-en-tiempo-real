@@ -33,17 +33,11 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Effect.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="AudioEffects.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Interface.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Fuzz.cpp">
-      <Filter>Source Files\Efectos</Filter>
     </ClCompile>
     <ClCompile Include="Delay.cpp">
       <Filter>Source Files\Efectos</Filter>
@@ -84,6 +78,24 @@
     <ClCompile Include="NotchOrder2.cpp">
       <Filter>Source Files\Para efectos</Filter>
     </ClCompile>
+    <ClCompile Include="CompleteReverb.cpp">
+      <Filter>Source Files\Para efectos</Filter>
+    </ClCompile>
+    <ClCompile Include="Distortion.cpp">
+      <Filter>Source Files\Efectos</Filter>
+    </ClCompile>
+    <ClCompile Include="Effect.cpp">
+      <Filter>Source Files\Efectos</Filter>
+    </ClCompile>
+    <ClCompile Include="WavEffectAdder.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FFT.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Robot.cpp">
+      <Filter>Source Files\Efectos</Filter>
+    </ClCompile>
     <ClCompile Include="effect3D.cpp">
       <Filter>Source Files\Efectos</Filter>
     </ClCompile>
@@ -119,17 +131,11 @@
     <ClInclude Include="portaudio.h">
       <Filter>Header Files\Portaudio Files</Filter>
     </ClInclude>
-    <ClInclude Include="Effect.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="AudioEffects.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Interface.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Fuzz.h">
-      <Filter>Header Files\Efectos</Filter>
     </ClInclude>
     <ClInclude Include="Delay.h">
       <Filter>Header Files\Efectos</Filter>
@@ -169,6 +175,30 @@
     </ClInclude>
     <ClInclude Include="NotchOrder2.h">
       <Filter>Header Files\Para efectos</Filter>
+    </ClInclude>
+    <ClInclude Include="CompleteReverb.h">
+      <Filter>Header Files\Para efectos</Filter>
+    </ClInclude>
+    <ClInclude Include="Distortion.h">
+      <Filter>Header Files\Efectos</Filter>
+    </ClInclude>
+    <ClInclude Include="Effect.h">
+      <Filter>Header Files\Efectos</Filter>
+    </ClInclude>
+    <ClInclude Include="WavEffectAdder.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sndfile.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sndfile.hh">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FFT.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Robot.h">
+      <Filter>Header Files\Efectos</Filter>
     </ClInclude>
     <ClInclude Include="effect3D.h">
       <Filter>Header Files\Efectos</Filter>

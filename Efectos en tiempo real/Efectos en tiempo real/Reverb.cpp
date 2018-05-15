@@ -11,7 +11,7 @@ Reverb::Reverb(unsigned int sampleFreq)
 	paramNames = REVERB_DEFAULT_PARAM_NAMES;
 	paramValues = REVERB_DEFAULT_PARAM_VALUES;
 	saveValues();
-	Schroeder = NULL;
+	Full = NULL;
 	plane = new PlaneReverb(g,nmbrOfTaps);
 	LP = NULL;
 }
@@ -20,8 +20,8 @@ bool Reverb::Action(const float * in, float * out, unsigned int len)
 {
 	float aux;
 	unsigned int delayedInputIndex = 0;
-	if (paramValues[REVERB_TYPE_INDEX] == "Schroeder")
-		Schroeder->Action(in, out, len);
+	if (paramValues[REVERB_TYPE_INDEX] == "Full")
+		Full->Action(in, out, len);
 	else if (paramValues[REVERB_TYPE_INDEX] == "Plane")
 		plane->Action(in, out, len);
 	else if (paramValues[REVERB_TYPE_INDEX] == "LP")
@@ -34,10 +34,10 @@ bool Reverb::setParam(string paramName, string paramValue)
 	bool retVal = false;
 	if (paramName == "Type")
 	{
-		if (paramValue == "Schroeder")
+		if (paramValue == "Full")
 		{	
-			paramNames = REVERB_SCHROEDER_PARAM_NAMES;
-			paramValues = REVERB_SCHROEDER_DEFAULT_PARAM_VALUES;
+			paramNames = REVERB_FULL_PARAM_NAMES;
+			paramValues = REVERB_FULL_DEFAULT_PARAM_VALUES;
 			retVal = true;
 		}
 		else if (paramValue == "Plane")
@@ -58,6 +58,26 @@ bool Reverb::setParam(string paramName, string paramValue)
 		if (stof(paramValue) < REVERB_SCHROEDER_MAX_G && stof(paramValue) > 0)
 		{	
 			paramValues[REVERB_G_INDEX] = paramValue; 
+			retVal = true;
+		}
+		else
+			ErrorMsg = REVERB_G_ERROR_MSG;
+	}
+	else if (paramName == "A Factor")
+	{
+		if (stof(paramValue) < REVERB_SCHROEDER_MAX_G && stof(paramValue) > 0)
+		{
+			paramValues[2] = paramValue;
+			retVal = true;
+		}
+		else
+			ErrorMsg = REVERB_G_ERROR_MSG;
+	}
+	else if (paramName == "Depth")
+	{
+		if (stof(paramValue) < REVERB_SCHROEDER_MAX_G && stof(paramValue) > 0)
+		{
+			paramValues[3] = paramValue;
 			retVal = true;
 		}
 		else
@@ -94,10 +114,10 @@ bool Reverb::setParam(string paramName, string paramValue)
 
 void Reverb::updateReverb()
 {
-	if (paramValues[REVERB_TYPE_INDEX] == "Schroeder")
-	{	if(Schroeder != NULL)
-			delete Schroeder;
-		Schroeder = new BasicReverberator(g, nmbrOfTaps);
+	if (paramValues[REVERB_TYPE_INDEX] == "Full")
+	{	if(Full != NULL)
+			delete Full;
+		Full = new CompleteReverb(a,g, depth,(float) sampleFreq);
 	}
 	else if (paramValues[REVERB_TYPE_INDEX] == "Plane")
 	{	
@@ -118,6 +138,11 @@ void Reverb::saveValues()
 	g = stof(paramValues[REVERB_G_INDEX]);
 	if (paramValues[REVERB_TYPE_INDEX] == "LP")
 		a = stof(paramValues[REVERB_FC_INDEX]);
+	if (paramValues[REVERB_TYPE_INDEX] == "Full")
+	{
+		a = stof(paramValues[2]);
+		depth = stof(paramValues[3]);
+	}
 }
 
 Reverb::~Reverb()

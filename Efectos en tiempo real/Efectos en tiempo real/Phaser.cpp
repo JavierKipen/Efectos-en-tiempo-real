@@ -2,10 +2,12 @@
 
 #define PHASER_DEPTH_INDEX 0
 #define PHASER_SWEEP_INDEX 1
-#define PHASER_LFO_FREQ_INDEX 2
-#define PHASER_N_FILTERS_INDEX 3
-#define PHASER_Q_INDEX 4
-#define PHASER_GB_INDEX 5
+#define PHASER_MIN_FREQ_INDEX 2
+#define PHASER_LFO_FREQ_INDEX 3
+#define PHASER_LFO_TYPE_INDEX 4
+#define PHASER_R_INDEX 5
+
+#define PI 3.141592625
 
 
 
@@ -14,38 +16,20 @@ Phaser::Phaser(unsigned int sampleFreq)
 	this->sampleFreq = sampleFreq;
 	paramNames = PHASER_PARAM_NAMES;
 	paramValues = PHASER_DEFAULT_PARAM_VALUES;
-	filterMinFrecs[0] = 200;
-	filterMinFrecs[1] = 400;
-	filterMinFrecs[2] = 800;
-	filterMinFrecs[3] = 1600;
-	filterMinFrecs[4] = 3200;
 	saveValues();
-	NotchFilter = vector<NotchOrder2>(5);
-	for (auto& filter : NotchFilter)
-		filter.setSampleFreq(sampleFreq);
+	notchFilter.setSampleFreq(sampleFreq);
 }
 
 bool Phaser::Action(const float * in, float * out, unsigned int len)
 {
-	fo = 440;
-	sweepWidth = 220;
 	float faux, aux[2];
 	for (unsigned int i = 0; i <  len; i++)
 	{
-		/*faux = filterMinFrecs[0] + sweepWidth * sin(2 * 3.14159265*(float)sampleCount*lfoFreq / sampleFreq);
-		NotchFilter[0].setParameters(faux, 0.99);
-		NotchFilter[0].filter((float *)in, aux, 1);
-		for (int i = 1; i < 5; i++)
-		{
-			faux = filterMinFrecs[i] + sweepWidth * sin(2 * 3.14159265*(float)sampleCount*lfoFreq / sampleFreq);
-			NotchFilter[i].setParameters(faux, 0.99);
-			NotchFilter[i].filter(aux, aux, 1);
-		}*/
-		faux = fo + sweepWidth * sin(2 * 3.14159265*(float)sampleCount*lfoFreq / sampleFreq);
-		NotchFilter[0].setParameters(faux, 0.99);
-		NotchFilter[0].filter((float *)in, aux, 1);
-		*out++ = *in++ - aux[0];
-		*out++ = *in++ - aux[1];
+		faux = getNotchFreq();
+		notchFilter.setParameters(faux, R);
+		notchFilter.filter((float *)in, aux, 1);
+		*out++ = (*in++ *(1-depth) - depth * aux[0])*2;
+		*out++ = (*in++ *(1 - depth) - depth * aux[1]) * 2;
 		sampleCount++;
 	}
 	return true;
@@ -53,37 +37,99 @@ bool Phaser::Action(const float * in, float * out, unsigned int len)
 
 bool Phaser::setParam(string paramName, string paramValue)
 {
-	return false;
+	bool retVal = false;
+	if (paramName == "LFO Type")
+	{
+		if (paramValue == "Sine" || paramValue == "Triang" || paramValue=="Exp Triang")
+		{
+			paramValues[PHASER_LFO_TYPE_INDEX] = paramValue;
+			retVal = true;
+		}
+		else
+			ErrorMsg = PHASER_LFO_TYPE_ERROR_MSG;
+	}
+	else {
+		float paramValuef = stof(paramValue);
+		if (paramName == "Depth")
+		{
+			if (paramValuef >= 0 && paramValuef <= 1)
+			{
+				paramValues[PHASER_DEPTH_INDEX] = paramValue; retVal = true;
+			}
+			else
+				ErrorMsg = PHASER_DEPTH_ERROR_MSG;
+		}
+		else if (paramName == "Sweep Width")
+		{
+			if (paramValuef >= 0 && paramValuef <= 1)
+			{
+				paramValues[PHASER_SWEEP_INDEX] = paramValue; retVal = true;
+			}
+			else
+				ErrorMsg = PHASER_SWEEP_WIDTH_ERROR_MSG;
+		}
+		else if (paramName == "LFO Freq")
+		{
+			if (paramValuef >= PHASER_MIN_LFO_FREQ && paramValuef <= PHASER_MAX_LFO_FREQ)
+			{
+				paramValues[PHASER_LFO_FREQ_INDEX] = paramValue; retVal = true;
+			}
+			else
+				ErrorMsg = PHASER_LFO_FREQ_ERROR_MSG;
+		}
+		else if (paramName == "Pole Ratio")
+		{
+			if (paramValuef > 0 && paramValuef < 1)
+			{
+				paramValues[PHASER_R_INDEX] = paramValue; retVal = true;
+			}
+			else
+				ErrorMsg = PHASER_R_ERROR_MSG;
+		}
+		else if (paramName == "Min Frequency")
+		{
+			if (paramValuef > MIN_AUDIBLE_FREQ && paramValuef < MAX_AUDIBLE_FREQ)
+			{
+				paramValues[PHASER_MIN_FREQ_INDEX] = paramValue; retVal = true;
+			}
+			else
+				ErrorMsg = PHASER_MIN_FREQ_ERROR_MSG;
+		}
+	}
+
+	if (retVal == true)
+		saveValues();
+	return retVal;
 }
-
-
-
-void Phaser::updateFilters()
+float Phaser::getNotchFreq()
 {
-	varBRFilter.sampleFreq = (float)sampleFreq;
-	varBRFilter.numberOfFilters = numberOfFilters;
-	if (prevNmbrOfFilters != numberOfFilters) //En el caso que se cambio el número de filtros, se crearan los filtros necesarios.
-		varBRFilter.createFilters();
-	varBRFilter.gb = gb;
-	varBRFilter.Q = Q;
-	varBRFilter.sweepWidth = sweepWidth;
-	varBRFilter.lfoFreq = lfoFreq;
-	memcpy(varBRFilter.filterMinFrecs, filterMinFrecs, MAX_NMBR_OF_FILTERS);
-	varBRFilter.recalcFiltersCoefs();
+	float retVal, sweepRange,W;
+	if (paramValues[PHASER_LFO_TYPE_INDEX] == "Exp Triang")
+	{
+		W = MAX_AUDIBLE_FREQ  / fo;
+		retVal = fo * pow(W, sweepWidth *TRI_WAVE((float)sampleCount, (float)sampleFreq / lfoFreq));
+	}
+	else if (paramValues[PHASER_LFO_TYPE_INDEX] == "Sine")
+	{/*En este caso, fo es la frecuencia mínima, y el 1 de sweep viene dado cuando la frecuencia máxima llega a 20KHz*/
+		sweepRange = sweepWidth * (MAX_AUDIBLE_FREQ - fo);
+		retVal= fo + sweepRange * (1+sin(2 * PI*(float)sampleCount*lfoFreq / (float)sampleFreq))/2.0f;
+	}
+	else if (paramValues[PHASER_LFO_TYPE_INDEX] == "Triang")
+	{
+		sweepRange = sweepWidth * (MAX_AUDIBLE_FREQ - fo);
+		retVal = fo + sweepRange * TRI_WAVE((float)sampleCount, (float)sampleFreq/lfoFreq);
+	}
+	return retVal;
 }
-
-
 void Phaser::saveValues()
 {
-	prevNmbrOfFilters = numberOfFilters;
-	depth = stof(paramValues[PHASER_DEPTH_INDEX]);
+
+	depth = 0.25f+stof(paramValues[PHASER_DEPTH_INDEX])/4.0f;
 	sweepWidth = stof(paramValues[PHASER_SWEEP_INDEX]);
+	fo= stof(paramValues[PHASER_MIN_FREQ_INDEX]);
 	lfoFreq = stof(paramValues[PHASER_LFO_FREQ_INDEX]);
-	numberOfFilters = stoi(paramValues[PHASER_N_FILTERS_INDEX]);
-	Q = stof(paramValues[PHASER_Q_INDEX]);
-	gb = stof(paramValues[PHASER_GB_INDEX]);
+	R = stof(paramValues[PHASER_R_INDEX]);
 	
-	updateFilters();
 }
 
 Phaser::~Phaser()
