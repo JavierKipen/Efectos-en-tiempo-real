@@ -157,6 +157,8 @@ void Interface::printMenu()
 		cout << valueErrorMsg << endl;
 		valueErrorMsg.clear();
 	}
+	else if (A!=NULL && A->popNumericalError())
+		cout << "The input to this parameter must be numerical! " << endl;
 }
 
 Interface::~Interface()

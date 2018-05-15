@@ -6,6 +6,8 @@ Robot::Robot(unsigned int sampleFreq,unsigned int N)
 {
 	this->sampleFreq = sampleFreq;
 	this->N = N;
+	paramNames = ROBOT_PARAM_NAMES;
+	paramValues = ROBOT_PARAM_VALUES;
 	windowed = true;
 	inL = vector<complex<float>>(N);
 	inR = vector<complex<float>>(N);
@@ -77,6 +79,22 @@ bool Robot::Action(const float * in, float * out, unsigned int len)
 
 bool Robot::setParam(string paramName, string paramValue)
 {
+	bool retVal = false;
+	if (paramName == "Windowed")
+	{
+		if (paramValue == "Yes")
+		{
+			windowed = true;
+			paramValues[0] = paramValue;
+			retVal = true;
+		}
+		else if (paramValue == "No")
+		{
+			windowed = false;
+			paramValues[0] = paramValue;
+			retVal = true;
+		}
+	}
 	return true;
 }
 

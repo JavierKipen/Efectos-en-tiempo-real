@@ -29,10 +29,11 @@ public:
 	void pickNewEffect(string newEffect); //Escoge un nuevo efecto actual. El string que se pasa como argumento tiene que ser alguno de los que devuelve getlistofeffects
 	string popErrorMsg();
 	bool getInitOk();
+	bool popNumericalError();
 	~AudioEffects();
 private:
 	void initPortAudio(unsigned int sampleRate, unsigned int framesPerBuffer);
-	bool initOk,prevEffectWasRobot;
+	bool initOk,prevEffectWasRobot, warnBoutNumeric;
 	Effect * currentEffect;
 	vector<string> allEffects;
 	PaStreamParameters inputParameters, outputParameters;

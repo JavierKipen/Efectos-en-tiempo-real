@@ -10,6 +10,7 @@ using namespace std::chrono;
 AudioEffects::AudioEffects()
 {
 	currentEffect = new Delay(DEFAULT_SAMPLE_RATE);
+	warnBoutNumeric = false;
 	allEffects = LIST_OF_EFFECTS;
 	initOk = false;
 	prevEffectWasRobot = false;
@@ -129,8 +130,14 @@ bool AudioEffects::setParam(string paramName, string paramValue)
 	bool retVal=false;
 	Pa_StopStream(stream);
 	while ((err = Pa_IsStreamActive(stream)) != 0);
-	if (paramValue.size()!=0) //Evita valores que nunca van a tomar parámetros.
-		retVal = currentEffect->setParam(paramName, paramValue);
+	try {
+		if (paramValue.size() != 0) //Evita valores que nunca van a tomar parámetros.
+			retVal = currentEffect->setParam(paramName, paramValue);
+	}
+	catch (std::invalid_argument a)
+	{
+		warnBoutNumeric = true;
+	}
 	Pa_StartStream(stream);
 	return retVal;
 }
@@ -151,7 +158,12 @@ bool AudioEffects::Action(const float * in, float * out, unsigned int len)
 	}
 	return true;*/
 }
-
+bool AudioEffects::popNumericalError()
+{
+	bool aux = warnBoutNumeric;
+	warnBoutNumeric = false;
+	return aux;
+}
 vector<string> AudioEffects::getListOfEffects()
 {
 	return allEffects;

@@ -2,6 +2,9 @@
 #include "Effect.h"
 #include "FFT.h"
 
+#define ROBOT_PARAM_NAMES {"Windowed"}
+#define ROBOT_PARAM_VALUES {"Yes"}
+
 #define ROBOT_DEFAULT_LEN 512
 class Robot :
 	public Effect
