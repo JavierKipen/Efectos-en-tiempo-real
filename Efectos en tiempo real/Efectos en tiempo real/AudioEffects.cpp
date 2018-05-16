@@ -82,7 +82,7 @@ void AudioEffects::pickNewEffect(string newEffect)
 		currentEffect = new Phaser(DEFAULT_SAMPLE_RATE);
 	else if (newEffect == "Robot")
 		currentEffect = new Robot(DEFAULT_SAMPLE_RATE, ROBOT_DEFAULT_LEN);
-	else if (newEffect == "3D Effect")
+	else if (newEffect == "effect3D")
 		currentEffect = new effect3D(DEFAULT_SAMPLE_RATE);
 	//Pa_OpenStream(&stream, &inputParameters, &outputParameters, sampleRate, framesPerBuffer,0,audioEffectCallback,this);
 	if((newEffect != "Robot" && !prevEffectWasRobot) ||(newEffect == "Robot" && prevEffectWasRobot))

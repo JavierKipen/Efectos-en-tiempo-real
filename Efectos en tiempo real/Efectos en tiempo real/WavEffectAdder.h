@@ -6,6 +6,7 @@
 #include "Reverb.h"
 #include "Flanger.h"
 #include "Chorus.h"
+#include "effect3D.h"
 #include "Vibrato.h"
 #include "Phaser.h"
 #include "Robot.h"

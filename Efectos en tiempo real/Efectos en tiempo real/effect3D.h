@@ -18,7 +18,7 @@ public:
 	bool Action(const float * in, float * out, unsigned int len);
 	~effect3D();
 private:
-	void hsfilter(const float const * input, float * out, unsigned int len, float theta, char channel);
+	void hsfilter(const float * input, float * out, unsigned int len, float theta, char channel);
 	float lastInL, lastInR;
 	float lastTempOutL, lastTempOutR;
 	float lastOutL, lastOutR;

@@ -104,7 +104,7 @@ bool Flanger::setParam(string paramName, string paramValue)
 	bool retVal = true;
 	float value = stof(paramValue);
 
-	if (paramName == "DELAY" && value >= 1.0f && value <= 20.0f)	// [1:20] ms
+	if (paramName == "DELAY" && value >= 1.0f && value <= 5.0f)	// [1:20] ms
 	{
 		paramDelay = value / 1000.0f;
 		paramValues[0] = paramValue;

@@ -133,7 +133,6 @@
     <ClCompile Include="Effect.cpp" />
     <ClCompile Include="FFT.cpp" />
     <ClCompile Include="effect3D.cpp" />
-    <ClCompile Include="Fuzz.cpp" />
     <ClCompile Include="Interface.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Flanger.cpp" />
@@ -159,7 +158,6 @@
     <ClInclude Include="Effect.h" />
     <ClInclude Include="FFT.h" />
     <ClInclude Include="effect3D.h" />
-    <ClInclude Include="Fuzz.h" />
     <ClInclude Include="Interface.h" />
     <ClInclude Include="NotchOrder2.h" />
     <ClInclude Include="pa_asio.h" />
