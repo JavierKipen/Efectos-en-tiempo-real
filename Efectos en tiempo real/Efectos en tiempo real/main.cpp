@@ -2,9 +2,9 @@
 #include "WavEffectAdder.h"
 #include <time.h>  
 
-void main(int argc, char *argv[])
+int main(int argc, char *argv[])
 {
-	srand(time(NULL));
+	srand((unsigned int)time(NULL));
 	if (argc == 1) //En el caso que se llame al programa sin argumentos, se corren los efectos en tiempo real.
 	{
 		AudioEffects audioEffects; //Este objeto se encargará de inicializar a los efectos, e intermediará entre la interfaz y los últimos para cambiar sus parámetros
@@ -26,5 +26,5 @@ void main(int argc, char *argv[])
 	
 	
 
-
+	return 0;
 }

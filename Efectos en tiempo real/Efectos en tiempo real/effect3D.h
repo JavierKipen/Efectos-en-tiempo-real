@@ -4,9 +4,8 @@
 #include <math.h>
 
 #define EFFECT3D_ANGLE_DEFAULT "0"		// en grados
-#define EFFECT3D_ELEVATION_DEFAULT  "0"	// en grados
 
-#define EFFECT3D_PARAMETERS {"ANGLE", "ELEVATION"}
+#define EFFECT3D_PARAMETERS {"ANGLE"}
 
 #define PI 3.14159265
 

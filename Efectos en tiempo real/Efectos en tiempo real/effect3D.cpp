@@ -7,10 +7,8 @@ effect3D::effect3D(unsigned int sampleFreq)
 	paramNames = EFFECT3D_PARAMETERS;
 	paramValues.resize(paramNames.size(), "0");
 	paramValues[0] = EFFECT3D_ANGLE_DEFAULT;
-	paramValues[1] = EFFECT3D_ELEVATION_DEFAULT;
 
 	angle = (float)(stoi(paramValues[0]) % 360);
-	elevation = (float)(stoi(paramValues[1]) % 360);
 	lastOutL = 0.0f;
 	lastOutR = 0.0f;
 
@@ -26,11 +24,6 @@ bool effect3D::setParam(string paramName, string paramValue)
 	{
 		angle = (float)(stoi(paramValue) % 360);
 		paramValues[0] = paramValue;
-	}
-	else if (paramName == "ELEVATION") // [1:20] ms
-	{
-		elevation = (float)(stoi(paramValue) % 360);
-		paramValues[1] = paramValue;
 	}
 	return retVal;
 
