@@ -197,5 +197,11 @@
     <ClInclude Include="Robot.h">
       <Filter>Header Files\Efectos</Filter>
     </ClInclude>
+    <ClInclude Include="BR2.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="W2.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

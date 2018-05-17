@@ -20,10 +20,10 @@ private:
 	void deWindowBlocks();
 	void robotizeBlocks();
 	void savePreviousData();
-	void robotize(complex<float> *a);
+	void robotize(complex<double> *a);
 	void obtainOuputs();
 	bool windowed;
-	vector<complex<float>> inL, inR, HannWindow,prevInR,prevInL, OutL, OutR;
-	vector<complex<float>> block1L, block2L, block1R, block2R;
+	vector<complex<double>> inL, inR, HannWindow,prevInR,prevInL, OutL, OutR;
+	vector<complex<double>> block1L, block2L, block1R, block2R;
 };
 

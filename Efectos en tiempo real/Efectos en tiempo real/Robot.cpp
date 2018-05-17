@@ -1,6 +1,6 @@
 #include "Robot.h"
 
-
+using namespace ASSD;
 
 Robot::Robot(unsigned int sampleFreq,unsigned int N)
 {
@@ -9,20 +9,20 @@ Robot::Robot(unsigned int sampleFreq,unsigned int N)
 	paramNames = ROBOT_PARAM_NAMES;
 	paramValues = ROBOT_PARAM_VALUES;
 	windowed = true;
-	inL = vector<complex<float>>(N);
-	inR = vector<complex<float>>(N);
-	prevInL = vector<complex<float>>(N);
-	prevInR = vector<complex<float>>(N);
-	OutL = vector<complex<float>>(N);
-	OutR = vector<complex<float>>(N);
-	block1L = vector<complex<float>>(N);
-	block2L = vector<complex<float>>(N );
-	block1R = vector<complex<float>>(N);
-	block2R = vector<complex<float>>(N);
-	HannWindow = vector<complex<float>>(N);
+	inL = vector<complex<double>>(N);
+	inR = vector<complex<double>>(N);
+	prevInL = vector<complex<double>>(N);
+	prevInR = vector<complex<double>>(N);
+	OutL = vector<complex<double>>(N);
+	OutR = vector<complex<double>>(N);
+	block1L = vector<complex<double>>(N);
+	block2L = vector<complex<double>>(N );
+	block1R = vector<complex<double>>(N);
+	block2R = vector<complex<double>>(N);
+	HannWindow = vector<complex<double>>(N);
 	for (unsigned int i = 0; i < N; i++)
 	{
-		HannWindow[i] = 0.5*(1 - cos(2 * 3.14159265*(float)i / (float)(N - 1)));
+		HannWindow[i] = 0.5*(1 - cos(2 * 3.14159265*(double)i / (double)(N - 1)));
 	}
 }
 
@@ -35,14 +35,14 @@ bool Robot::Action(const float * in, float * out, unsigned int len)
 			inL[i] = *in++;
 			inR[i] = *in++;
 		}
-		fft(inL.data(),inL.data(), len);
+		FFT(inL.data(),inL.data(), len);
 		for (auto& c : inL)
 			c = abs(c);
-		ifft(inL.data(),inL.data(), len);
-		fft(inR.data(), inR.data(), len);
+		IFFT(inL.data(),inL.data(), len);
+		FFT(inR.data(), inR.data(), len);
 		for (auto& c : inR)
 			c = abs(c);
-		ifft(inR.data(), inR.data(), len);
+		IFFT(inR.data(), inR.data(), len);
 		for (unsigned int i = 0; i < len; i++)
 		{
 			(*out++)=inL[i].real();
@@ -142,12 +142,12 @@ void Robot::savePreviousData()
 		block1R[i] = inR[i + (N / 2)];
 	}
 }
-void Robot::robotize(complex<float> *a)
+void Robot::robotize(complex<double> *a)
 {
-	fft(a, a, N);
+	FFT(a, a, N);
 	for (unsigned int c=0; c< N;c++)
 		a[c] = abs(a[c]);
-	ifft(a, a, N);
+	IFFT(a, a, N);
 }
 void Robot::obtainOuputs()
 {

@@ -148,6 +148,7 @@
     <ClInclude Include="AudioEffects.h" />
     <ClInclude Include="BandRejectIIROrder2.h" />
     <ClInclude Include="BasicReverberator.h" />
+    <ClInclude Include="BR2.h" />
     <ClInclude Include="Chorus.h" />
     <ClInclude Include="CombReverberator.h" />
     <ClInclude Include="CombReverbLP.h" />
@@ -177,6 +178,7 @@
     <ClInclude Include="sndfile.hh" />
     <ClInclude Include="VarBRFilter.h" />
     <ClInclude Include="Vibrato.h" />
+    <ClInclude Include="W2.h" />
     <ClInclude Include="WavEffectAdder.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
