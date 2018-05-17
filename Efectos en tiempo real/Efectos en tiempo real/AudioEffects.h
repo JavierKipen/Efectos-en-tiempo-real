@@ -8,8 +8,9 @@
 #include "Vibrato.h"
 #include "Phaser.h"
 #include "Robot.h"
+#include "effect3D.h"
 
-#define LIST_OF_EFFECTS {"Distortion", "Delay", "Reverb", "Flanger", "Chorus","Vibrato", "Phaser", "Robot"}
+#define LIST_OF_EFFECTS {"Distortion", "Delay", "Reverb", "Flanger", "Chorus","Vibrato", "Phaser", "Robot", "effect3D"}
 
 #define DEFAULT_SAMPLE_RATE         (44100)
 #define PA_SAMPLE_TYPE      paFloat32
